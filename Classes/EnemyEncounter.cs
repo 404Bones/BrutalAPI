@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Text;
+﻿using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace BrutalAPI
 {
@@ -12,6 +10,7 @@ namespace BrutalAPI
         public FieldEnemy[][] variations = new FieldEnemy[1][];
         public EncounterDifficulty difficulty = EncounterDifficulty.Hard;
         public bool randomPlacement = false;
+        public bool hardmodeEncounter = true;
         public int area = (int)Areas.FarShore;
         public int rarity = 10;
         public SignType signType = SignType.None;
@@ -23,25 +22,51 @@ namespace BrutalAPI
         {
             //Add to bundle selector
             EnemyEncounterSelectorSO selector;
-            switch(difficulty)
+            
+            if (hardmodeEncounter)
             {
-                case EncounterDifficulty.Easy:
-                    selector = BrutalAPI.areas[area]._easyEnemyBundleSelector;
-                    break;
-                case EncounterDifficulty.Medium:
-                    selector = BrutalAPI.areas[area]._mediumEnemyBundleSelector;
-                    break;
-                case EncounterDifficulty.Hard:
-                    selector = BrutalAPI.areas[area]._hardEnemyBundleSelector;
-                    break;
-                case EncounterDifficulty.Boss:
-                    selector = BrutalAPI.areas[area]._bossBundleSelector;
-                    break;
-                default:
-                    Debug.LogError("Could not find bundle selector for area " + BrutalAPI.areas[area].ZoneName);
-                    selector = new EnemyEncounterSelectorSO();
-                    break;
+                switch (difficulty)
+                {
+                    case EncounterDifficulty.Easy:
+                        selector = BrutalAPI.hardAreas[area]._easyEnemyBundleSelector;
+                        break;
+                    case EncounterDifficulty.Medium:
+                        selector = BrutalAPI.hardAreas[area]._mediumEnemyBundleSelector;
+                        break;
+                    case EncounterDifficulty.Hard:
+                        selector = BrutalAPI.hardAreas[area]._hardEnemyBundleSelector;
+                        break;
+                    case EncounterDifficulty.Boss:
+                        selector = BrutalAPI.hardAreas[area]._bossBundleSelector;
+                        break;
+                    default:
+                        Debug.LogError("Could not find bundle selector for area " + BrutalAPI.areas[area].ZoneName);
+                        selector = new EnemyEncounterSelectorSO();
+                        break;
+                }
+            } else
+            {
+                switch (difficulty)
+                {
+                    case EncounterDifficulty.Easy:
+                        selector = BrutalAPI.areas[area]._easyEnemyBundleSelector;
+                        break;
+                    case EncounterDifficulty.Medium:
+                        selector = BrutalAPI.areas[area]._mediumEnemyBundleSelector;
+                        break;
+                    case EncounterDifficulty.Hard:
+                        selector = BrutalAPI.areas[area]._hardEnemyBundleSelector;
+                        break;
+                    case EncounterDifficulty.Boss:
+                        selector = BrutalAPI.areas[area]._bossBundleSelector;
+                        break;
+                    default:
+                        Debug.LogError("Could not find bundle selector for area " + BrutalAPI.areas[area].ZoneName);
+                        selector = new EnemyEncounterSelectorSO();
+                        break;
+                }
             }
+            
             global::EnemyEncounter encounter = new global::EnemyEncounter();
             encounter._bundleName = encounterName;
             encounter._priority = rarity;
@@ -52,21 +77,21 @@ namespace BrutalAPI
             BaseBundleGeneratorSO generator;
             if (randomPlacement) //Random placement
             {
-                generator = ScriptableObject.CreateInstance<RandomEnemyBundleSO>();      
+                generator = ScriptableObject.CreateInstance<RandomEnemyBundleSO>();
 
                 RandomEnemyGroup[] groups = new RandomEnemyGroup[variations.Length];
                 //Set enemy names for each variation
                 for (int i = 0; i < variations.Length; i++)
                 {
                     //Get all names of enemies in this variation
-                    string[] eNames = new string[variations[i].Length];
+                    List<string> eNames = new List<string>();
                     foreach (FieldEnemy item in variations[i])
-                        eNames = eNames.Append(item.enemyName).ToArray();
+                        eNames.Add(item.enemyName);
 
                     groups[i] = new RandomEnemyGroup();
-                    groups[i]._enemyNames = eNames;
+                    groups[i]._enemyNames = eNames.ToArray();
                 }
-                
+
                 ((RandomEnemyBundleSO)generator)._enemyBundles = groups;
             }
             //Specific placement
@@ -77,7 +102,7 @@ namespace BrutalAPI
                 SpecificEnemyGroup[] groups = new SpecificEnemyGroup[variations.Length];
                 //Set group per variation
                 for (int i = 0; i < groups.Length; i++)
-                {        
+                {
                     //Set info for each enemy in variation
                     SpecificEnemyInfo[] info = new SpecificEnemyInfo[variations[i].Length];
                     for (int j = 0; j < info.Length; j++)
@@ -100,6 +125,26 @@ namespace BrutalAPI
             generator._bundleSignType = signType;
 
             LoadedAssetsHandler.LoadedEnemyBundles.Add(encounterName, generator);
+
+            if (randomPlacement)
+            {
+                BaseBundleGeneratorSO bundle = LoadedAssetsHandler.GetEnemyBundle(encounterName);
+                RandomEnemyBundleSO ranbu = bundle as RandomEnemyBundleSO;
+                if (ranbu == null || ranbu.Equals(null))
+                {
+                    Debug.LogError("Random bundle is null");
+                }
+                foreach (RandomEnemyGroup item in ranbu._enemyBundles)
+                {
+                    foreach (string name in item.EnemyNames)
+                    {
+                        EnemySO enemy = LoadedAssetsHandler.GetEnemy(name);
+                        if (enemy == null || enemy.Equals(null))
+                            Debug.LogError(string.Format($"Enemy {0} is null :(", name));
+                    }
+                }
+            }
+
             Debug.Log("Added " + encounterName + " encounter");
         }
 

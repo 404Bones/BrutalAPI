@@ -12,6 +12,8 @@ namespace BrutalAPI
         public static BaseCombatTargettingSO FrontLeftRight;
         public static BaseCombatTargettingSO LeftRight;
         public static BaseCombatTargettingSO Sides;
+        public static BaseCombatTargettingSO Right;
+        public static BaseCombatTargettingSO Left;
 
         public static void Setup()
         {
@@ -30,6 +32,14 @@ namespace BrutalAPI
             Targetting_BySlot_Index frontLeftRightTarget = ScriptableObject.CreateInstance(typeof(Targetting_BySlot_Index)) as Targetting_BySlot_Index;
             frontLeftRightTarget.slotPointerDirections = new int[3] { -1, 0, 1 };
             FrontLeftRight = frontLeftRightTarget;
+
+            Targetting_BySlot_Index leftTarget = ScriptableObject.CreateInstance(typeof(Targetting_BySlot_Index)) as Targetting_BySlot_Index;
+            leftTarget.slotPointerDirections = new int[1] { -1 };
+            Left = leftTarget;
+
+            Targetting_BySlot_Index rightTarget = ScriptableObject.CreateInstance(typeof(Targetting_BySlot_Index)) as Targetting_BySlot_Index;
+            rightTarget.slotPointerDirections = new int[1] { 1 };
+            Right = rightTarget;
         }
 
         public static BaseCombatTargettingSO SlotTarget(int[] slots)

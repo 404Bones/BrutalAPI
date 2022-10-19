@@ -56,6 +56,7 @@ namespace BrutalAPI
             a.priority = ScriptableObject.CreateInstance(typeof(PrioritySO)) as PrioritySO;
             a.priority.priorityValue = priority;
             a.abilitySprite = sprite;
+            a.visuals = visuals;
 
             a.effects = new EffectInfo[effects.Length];
             a.intents = new IntentTargetInfo[effects.Length];

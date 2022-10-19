@@ -1,17 +1,18 @@
 ﻿using BepInEx;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Album;
 using System.Reflection;
 using System.Collections.Generic;
 using MonoMod.RuntimeDetour;
 using System;
+using Album;
 
 namespace BrutalAPI
 {
     [BepInPlugin("Bones404.BrutalAPI", "BrutalAPI", "1.0.0")]
     public class BrutalAPI : BaseUnityPlugin
     {
+
         const BindingFlags AllFlags = (BindingFlags)(-1);
         public static SelectableCharactersSO selCharsSO;
         public static CharacterAbility slapCharAbility;
@@ -23,6 +24,7 @@ namespace BrutalAPI
         public static List<EnemySO> moddedEnemies = new List<EnemySO>();
 
         public static List<ZoneBGDataBaseSO> areas = new List<ZoneBGDataBaseSO>();
+        public static List<ZoneBGDataBaseSO> hardAreas = new List<ZoneBGDataBaseSO>();
 
         public static AssetBundle brutalAPIassetBundle;
 
@@ -34,13 +36,18 @@ namespace BrutalAPI
                     typeof(PortalSignsDataBaseSO).GetMethod("InitializeSignDB", AllFlags),
                     typeof(BrutalAPI).GetMethod("SignDBInit", AllFlags));
 
-            new ModDescription("Bones404.BrutalAPI", "API to facilitate modding Brutal Orchestra.\nRead the documentation on the official modding page .");
+            new ModDescription("Bones404.BrutalAPI", "API to facilitate modding Brutal Orchestra.\nRead the documentation on the official modding page.");
             foreach (SelectableCharactersSO i in Resources.FindObjectsOfTypeAll<SelectableCharactersSO>()) { selCharsSO = i; }
             foreach (MainMenuController i in Resources.FindObjectsOfTypeAll<MainMenuController>()) { mainMenuController = i; }
             foreach (string i in mainMenuController._informationHolder.GetZoneDBs())
             {
                 ZoneBGDataBaseSO area = LoadedAssetsHandler.GetZoneDB(i) as ZoneBGDataBaseSO;
                 areas.Add(area);
+            }
+            foreach (string i in mainMenuController._informationHolder._runHardZoneDBs)
+            {
+                ZoneBGDataBaseSO area = LoadedAssetsHandler.GetZoneDB(i) as ZoneBGDataBaseSO;
+                hardAreas.Add(area);
             }
 
             brutalAPIassetBundle = AssetBundle.LoadFromMemory(ResourceLoader.ResourceBinary("brutalapi"));
@@ -57,24 +64,23 @@ namespace BrutalAPI
             Logger.LogInfo("BrutalAPI loaded successfully!");
 
             /* TODO:
-            - Enemies
+            - Custom Ability Animations
             - Sounds
             - Character Unlocks
             - Areas
+            - Quests
+            - Flavor Characters
             */
         }
 
         public void Update()
         {
-            if (Keyboard.current.yKey.wasPressedThisFrame)
-            {
-                mainMenuController._informationHolder.Run.playerData.AddNewItem(moddedItems[0]);
-            }
+
         }
 
         public static void AddSignType(SignType type, Sprite sprite)
         {
-            moddedPortalSigns.Add(new PortalSignsDataBaseSO.PortalSignIcon() { signIcon = sprite, signType = type});
+            moddedPortalSigns.Add(new PortalSignsDataBaseSO.PortalSignIcon() { signIcon = sprite, signType = type });
         }
 
         public static void SignDBInit(Action<PortalSignsDataBaseSO> orig, PortalSignsDataBaseSO self)
@@ -83,6 +89,14 @@ namespace BrutalAPI
             foreach (PortalSignsDataBaseSO.PortalSignIcon sign in moddedPortalSigns)
             {
                 self._signDB.Add(sign.signType, sign.signIcon);
+            }
+        }
+
+        public void PrintEnemies()
+        {
+            foreach (var item in Resources.LoadAll("Enemies"))
+            {
+                Debug.Log(item.name);
             }
         }
     }

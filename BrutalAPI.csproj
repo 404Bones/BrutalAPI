@@ -1,0 +1,127 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	<LangVersion>9.0</LangVersion>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="brutalapi" />
+    <None Remove="Textures\BasicPartyMember\BasicPartyMemberBack.png" />
+    <None Remove="Textures\BasicPartyMember\BasicPartyMemberFront.png" />
+    <None Remove="Textures\BasicPartyMember\BasicPartyMemberLocked.png" />
+    <None Remove="Textures\BasicPartyMember\BasicPartyMemberOverworld.png" />
+    <None Remove="Textures\BasicPartyMember\BasicPartyMemberUnlocked.png" />
+    <None Remove="Textures\Deformung\DeformungCombat.png" />
+    <None Remove="Textures\Deformung\DeformungCorpse.png" />
+    <None Remove="Textures\Deformung\DeformungOverworld.png" />
+    <None Remove="Textures\Mana\GreenMana.png" />
+    <None Remove="Textures\Mana\GreenManaCostSelected.png" />
+    <None Remove="Textures\Mana\GreenManaCostUnselected.png" />
+    <None Remove="Textures\Mana\GreenManaHealth.png" />
+    <None Remove="Textures\Mana\GreenManaUsed.png" />
+    <None Remove="Textures\Mungbertino\MungbertinoBack.png" />
+    <None Remove="Textures\Mungbertino\MungbertinoFront.png" />
+    <None Remove="Textures\Mungbertino\MungbertinoOverworld.png" />
+    <None Remove="Textures\Mungbert\CallAlliesAbility.png" />
+    <None Remove="Textures\Mungbert\CryAbility.png" />
+    <None Remove="Textures\Mungbert\FishSlapAbility.png" />
+    <None Remove="Textures\Mungbert\ImmortalRoe.png" />
+    <None Remove="Textures\Mungbert\MungbertBack.png" />
+    <None Remove="Textures\Mungbert\MungbertFront.png" />
+    <None Remove="Textures\Mungbert\MungbertLocked.png" />
+    <None Remove="Textures\Mungbert\MungbertOverworld.png" />
+    <None Remove="Textures\Mungbert\MungbertUnlocked.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="brutalapi" />
+    <EmbeddedResource Include="Textures\BasicPartyMember\BasicPartyMemberBack.png" />
+    <EmbeddedResource Include="Textures\BasicPartyMember\BasicPartyMemberFront.png" />
+    <EmbeddedResource Include="Textures\BasicPartyMember\BasicPartyMemberLocked.png" />
+    <EmbeddedResource Include="Textures\BasicPartyMember\BasicPartyMemberOverworld.png" />
+    <EmbeddedResource Include="Textures\BasicPartyMember\BasicPartyMemberUnlocked.png" />
+    <EmbeddedResource Include="Textures\Deformung\DeformungCombat.png" />
+    <EmbeddedResource Include="Textures\Deformung\DeformungCorpse.png" />
+    <EmbeddedResource Include="Textures\Deformung\DeformungOverworld.png" />
+    <EmbeddedResource Include="Textures\Mana\GreenMana.png" />
+    <EmbeddedResource Include="Textures\Mana\GreenManaCostSelected.png" />
+    <EmbeddedResource Include="Textures\Mana\GreenManaCostUnselected.png" />
+    <EmbeddedResource Include="Textures\Mana\GreenManaHealth.png" />
+    <EmbeddedResource Include="Textures\Mana\GreenManaUsed.png" />
+    <EmbeddedResource Include="Textures\Mungbertino\MungbertinoBack.png" />
+    <EmbeddedResource Include="Textures\Mungbertino\MungbertinoFront.png" />
+    <EmbeddedResource Include="Textures\Mungbertino\MungbertinoOverworld.png" />
+    <EmbeddedResource Include="Textures\Mungbert\CallAlliesAbility.png" />
+    <EmbeddedResource Include="Textures\Mungbert\CryAbility.png" />
+    <EmbeddedResource Include="Textures\Mungbert\FishSlapAbility.png" />
+    <EmbeddedResource Include="Textures\Mungbert\ImmortalRoe.png" />
+    <EmbeddedResource Include="Textures\Mungbert\MungbertBack.png" />
+    <EmbeddedResource Include="Textures\Mungbert\MungbertFront.png" />
+    <EmbeddedResource Include="Textures\Mungbert\MungbertLocked.png" />
+    <EmbeddedResource Include="Textures\Mungbert\MungbertOverworld.png" />
+    <EmbeddedResource Include="Textures\Mungbert\MungbertUnlocked.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Album">
+      <HintPath>..\..\Steam\steamapps\common\Brutal Orchestra\BepInEx\plugins\Album.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="FMODUnity">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\FMODUnity.dll</HintPath>
+    </Reference>
+    <Reference Include="MMHOOK_Assembly-CSharp">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\MMHOOK_Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMod.RuntimeDetour">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\MonoMod.RuntimeDetour.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\Unity.InputSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextCoreModule">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\UnityEngine.TextCoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>..\..\Files 2\Folders\BO Modding References\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

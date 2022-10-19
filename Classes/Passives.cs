@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using UnityEngine;
 
 namespace BrutalAPI
 {
     class Passives
     {
         public static BasePassiveAbilitySO Withering;
+        public static BasePassiveAbilitySO Slippery;
+        public static BasePassiveAbilitySO Overexert;
+        public static BasePassiveAbilitySO Multiattack;
 
         public static void Setup()
         {
@@ -20,7 +21,12 @@ namespace BrutalAPI
                             break;
                         }
                 }
-            } 
+            }
+
+            var chordophone = LoadedAssetsHandler.GetEnemy("Chordophone_EN");
+            Multiattack = chordophone.passiveAbilities[0];
+            Overexert = chordophone.passiveAbilities[1];
+            Slippery = chordophone.passiveAbilities[2];
         }
     }
 }

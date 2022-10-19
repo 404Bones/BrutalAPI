@@ -19,25 +19,35 @@ namespace BrutalAPI
             e.prefab = BrutalAPI.brutalAPIassetBundle.LoadAsset<GameObject>("assets/deformung/deformung variant.prefab").AddComponent<EnemyInFieldLayout>();
             e.prefab.SetDefaultParams();
             e.prefab._gibs = BrutalAPI.brutalAPIassetBundle.LoadAsset<GameObject>("assets/deformung/deformunggibs.prefab").GetComponent<ParticleSystem>();
-            e.combatSprite = ResourceLoader.LoadSprite("DeformungCombat");
-            e.overworldAliveSprite = ResourceLoader.LoadSprite("DeformungOverworld");
-            e.overworldDeadSprite = ResourceLoader.LoadSprite("DeformungCorpse");
+            e.combatSprite = ResourceLoader.LoadSprite("DeformungCombat", 32);
+            e.overworldAliveSprite = ResourceLoader.LoadSprite("DeformungOverworld", 32);
+            e.overworldDeadSprite = ResourceLoader.LoadSprite("DeformungCorpse", 32);
             e.hurtSound = "event:/Characters/Enemies/Mung/CHR_ENM_Mung_Dmg";
             e.deathSound = "event:/Characters/Enemies/Mung/CHR_ENM_Mung_Dth";
             e.loot = new EnemyLootItemProbability[1] {new EnemyLootItemProbability() { isItemTreasure = true, amount = 1, probability = 100 } };
+            e.abilitySelector = ScriptableObject.CreateInstance<AbilitySelector_ByRarity>();
+            e.passives = new BasePassiveAbilitySO[] { Passives.Multiattack, Passives.Overexert, Passives.Slippery };
+            e.passives[0].passiveAbilityName = "Multiattack(3)";
+            ((IntegerSetterPassiveAbility)e.passives[0]).integerValue = 3;
+
+            e.passives[1].passiveAbilityName = "Overexert(8)";
+            e.passives[1]._enemyDescription = "Upon receiving 8 or more direct damage, cancel 1 of this enemy's actions.";
+           ((OverexertPassiveAbility)e.passives[1]).conditions[0] = new IntegerReferenceOverEqualValueEffectorCondition() { compareValue = 8 };
 
             e.abilities = new Ability[5];
 
             Ability hysteria = new Ability();
             hysteria.name = "Hysteria";
-            hysteria.description = "Deal 2 damage to the Opposing party member.";
+            hysteria.description = "Deal 2 damage to the Opposing party members. Generate 3 blue pigment.";
             hysteria.rarity = 7;
             hysteria.effects = new Effect[2]
             {
-                new Effect(ScriptableObject.CreateInstance<DamageEffect>(), 2, IntentType.Damage_1_2, Slots.LargeSlotTarget(new int[2] { 0, 1 })),
-                new Effect(ScriptableObject.CreateInstance<GenerateColorManaEffect>(), 3, IntentType.Mana_Generate, null)
+                new Effect(ScriptableObject.CreateInstance<DamageEffect>(), 2, IntentType.Damage_1_2, Slots.Front),
+                new Effect(ScriptableObject.CreateInstance<GenerateColorManaEffect>(), 3, IntentType.Mana_Generate, Slots.Self)
             };
+            hysteria.visuals = LoadedAssetsHandler.LoadEnemy("Mung_EN").abilities[1].ability.visuals;
             ((GenerateColorManaEffect)hysteria.effects[1]._effect).mana = Pigments.Blue;
+            ((GenerateColorManaEffect)hysteria.effects[1]._effect).usePreviousExitValue = false;
 
             Ability flip = new Ability();
             flip.name = "Flip";
@@ -67,12 +77,13 @@ namespace BrutalAPI
             bellow.rarity = 10;
             bellow.effects = new Effect[3]
             {
-                new Effect(ScriptableObject.CreateInstance<DamageEffect>(), 4, IntentType.Damage_3_6, Slots.LargeSlotTarget(new int[2] { 0, 1 })),
+                new Effect(ScriptableObject.CreateInstance<DamageEffect>(), 4, IntentType.Damage_3_6, Slots.Front),
                 new Effect(ScriptableObject.CreateInstance<SwapToOneSideEffect>(), 0, IntentType.Swap_Right, Slots.LargeSlotTarget(new int[1] { 1 })),
                 new Effect(ScriptableObject.CreateInstance<SwapToOneSideEffect>(), 0, IntentType.Swap_Left, Slots.LargeSlotTarget(new int[1] { 0 }))
             };
             ((SwapToOneSideEffect)bellow.effects[1]._effect)._swapRight = true;
             ((SwapToOneSideEffect)bellow.effects[2]._effect)._swapRight = false;
+            bellow.visuals = LoadedAssetsHandler.LoadEnemy("Flarblet_EN").abilities[2].ability.visuals;
 
             Ability snap = new Ability();
             snap.name = "Snap";
@@ -80,12 +91,13 @@ namespace BrutalAPI
             snap.rarity = 10;
             snap.effects = new Effect[3]
             {
-                new Effect(ScriptableObject.CreateInstance<DamageEffect>(), 4, IntentType.Damage_3_6, Slots.LargeSlotTarget(new int[2] { -1, 2 })),
-                new Effect(ScriptableObject.CreateInstance<SwapToOneSideEffect>(), 0, IntentType.Swap_Right, Slots.LargeSlotTarget(new int[1] { -1 })),
-                new Effect(ScriptableObject.CreateInstance<SwapToOneSideEffect>(), 0, IntentType.Swap_Left, Slots.LargeSlotTarget(new int[1] { 2 }))
+                new Effect(ScriptableObject.CreateInstance<DamageEffect>(), 4, IntentType.Damage_3_6, Slots.LeftRight),
+                new Effect(ScriptableObject.CreateInstance<SwapToOneSideEffect>(), 0, IntentType.Swap_Right, Slots.Left),
+                new Effect(ScriptableObject.CreateInstance<SwapToOneSideEffect>(), 0, IntentType.Swap_Left, Slots.Right)
             };
             ((SwapToOneSideEffect)snap.effects[1]._effect)._swapRight = true;
             ((SwapToOneSideEffect)snap.effects[2]._effect)._swapRight = false;
+            snap.visuals = LoadedAssetsHandler.LoadEnemy("Spoggle_Spitfire_EN").abilities[1].ability.visuals;
 
             e.abilities[0] = hysteria;
             e.abilities[1] = flip;

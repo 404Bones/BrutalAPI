@@ -14,6 +14,7 @@ namespace BrutalAPI
 
         public static void Setup()
         {
+
             CharacterDataBase charDataBase = LoadedAssetsHandler.GetCharacterDB();
             List<string> charNamelist = charDataBase._characters;
 

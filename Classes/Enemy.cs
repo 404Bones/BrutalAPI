@@ -51,6 +51,8 @@ namespace BrutalAPI
             e.damageSound = hurtSound;
             e.deathSound = deathSound;
             e.enemyTemplate = prefab;
+            e.priority = ScriptableObject.CreateInstance(typeof(PrioritySO)) as PrioritySO;
+            e.priority.priorityValue = priority;
 
             //Convert Ability to EnemyAbilityInfo
             EnemyAbilityInfo[] eai = new EnemyAbilityInfo[abilities.Length];
