@@ -15,6 +15,8 @@ namespace BrutalAPI
             encounter.rarity = 1000;
             encounter.variations = new FieldEnemy[2][];
             encounter.signType = (SignType)1412;
+            encounter.musicEvent = LoadedAssetsHandler.GetEnemyBundle("H_Zone01_MunglingMudLung_Easy_EnemyBundle")._musicEventReference;
+            encounter.roarEvent = LoadedAssetsHandler.GetEnemyBundle("H_Zone01_MunglingMudLung_Easy_EnemyBundle")._roarReference.roarEvent;
 
             //Encounter enemies
             encounter.variations[0] = new FieldEnemy[1];

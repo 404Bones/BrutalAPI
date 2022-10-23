@@ -19,11 +19,12 @@ namespace BrutalAPI
             i.immediate = false;
             CopyAndSpawnCustomCharacterAnywhereEffect e = ScriptableObject.CreateInstance<CopyAndSpawnCustomCharacterAnywhereEffect>();
             e._characterCopy = "Mungbertino_CH";
-            e._nameAddition = "";
+            e._nameAddition = NameAdditionLocID.NameAdditionNone;
             e._rank = 0;
             e._extraModifiers = new WearableStaticModifierSetterSO[0];
             e._permanentSpawn = true;
             i.effects = new ConditionEffect[1] { new ConditionEffect(e, 1, null, Slots.Self) };
+            i.unlockableID = (UnlockableID)45813;
             i.AddItem();
         }
     }

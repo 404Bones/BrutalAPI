@@ -40,14 +40,14 @@ namespace BrutalAPI
 
         public static void BaseWearable(this BaseWearableSO w, Item item)
         {
-            w.wearableName = item.name;
+            w._itemName = item.name;
             w.triggerOn = item.trigger;
             w.doesItemPopUp = item.namePopup;
             w.doesTriggerAttachedActionOnInitialization = false;
             w.getsConsumedOnUse = item.consumedOnUse;
             w.consumeConditions = item.consumeConditions;
-            w.description = item.description;
-            w.flavourText = item.flavorText;
+            w._description = item.description;
+            w._flavourText = item.flavorText;
             w.wearableImage = item.sprite;
             w.staticModifiers = item.equippedModifiers;
             w.conditions = item.triggerConditions;
@@ -55,6 +55,9 @@ namespace BrutalAPI
             w.isShopItem = item.isShopItem;
             w.startsLocked = item.startsLocked;
             w.usesTheOnUnlockText = false;
+
+            UnlockableData data = new UnlockableData { items = new string[1] { item.name }, hasItemUnlock = true };
+            BrutalAPI.unlockablesDatabase._unlockables.Add(item.unlockableID, data);
         }
 
         public static string[] Add(this string[] stringArray, string addedString)
@@ -68,17 +71,16 @@ namespace BrutalAPI
             return list.ToArray();
         }
 
-        public static void AddItem(this Item i)
+        public static int CountColorPigment(this ManaBar manaBar, ManaColorSO mana)
         {
-            var w = i.Wearable();
-            
-            LoadedAssetsHandler.LoadedWearables.Add(i.name, w);
+            int amount = 0;
+            foreach (ManaBarSlot slot in manaBar.ManaBarSlots)
+            {
+                if (!slot.IsEmpty && slot.ManaColor == mana)
+                    ++amount;
+            }
 
-            if(i.isShopItem) { BrutalAPI.mainMenuController._informationHolder.ItemPoolDB.ShopPool.Add(i.name); }
-            else { BrutalAPI.mainMenuController._informationHolder.ItemPoolDB.TreasurePool.Add(i.name); }
-            BrutalAPI.moddedItems.Add(w);
-
-            Debug.Log("Added item " + i.name);
+            return amount;
         }
     }
 }

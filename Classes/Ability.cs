@@ -13,6 +13,7 @@ namespace BrutalAPI
         public int priority = 0;
         public int rarity = 10;
         public bool canBeRerolled = true;
+        public BaseCombatTargettingSO animationTarget = Slots.Self;
 
         public CharacterAbility CharacterAbility()
         {
@@ -20,11 +21,13 @@ namespace BrutalAPI
             AbilitySO a = ScriptableObject.CreateInstance(typeof(AbilitySO)) as AbilitySO;
             ability.ability = a;
             ability.cost = cost;
-            a.abilityName = name;
-            a.description = description;
+            a._locAbilityData = new StringPairData(name, description);
+            a._locID = "en_US";
             a.priority = ScriptableObject.CreateInstance(typeof(PrioritySO)) as PrioritySO;
             a.priority.priorityValue = priority;
-            a.abilitySprite = sprite;
+            a.abilitySprite = sprite == null ? LoadedAssetsHandler.GetEnemy("Mung_EN").abilities[0].ability.abilitySprite : sprite;
+            a.visuals = visuals;
+            a.animationTarget = animationTarget;
 
             a.effects = new EffectInfo[effects.Length];
             a.intents = new IntentTargetInfo[effects.Length];
@@ -39,7 +42,7 @@ namespace BrutalAPI
 
                 a.intents[i] = new IntentTargetInfo();
                 a.intents[i].targets = effects[i]._target;
-                a.intents[i].targetIntents = new IntentType[1] { effects[i]._intent };
+                a.intents[i].targetIntents = effects[i]._intent == null ? new IntentType[0] : new IntentType[1] { (IntentType)effects[i]._intent };
             }
             return ability;
         }
@@ -51,12 +54,13 @@ namespace BrutalAPI
             ability.rarity = ScriptableObject.CreateInstance<RaritySO>();
             ability.rarity.rarityValue = rarity;
             ability.rarity.canBeRerolled = canBeRerolled;
-            a.abilityName = name;
-            a.description = description;
+            a._locAbilityData = new StringPairData(name, description);
+            a._locID = "en_US";
             a.priority = ScriptableObject.CreateInstance(typeof(PrioritySO)) as PrioritySO;
             a.priority.priorityValue = priority;
-            a.abilitySprite = sprite;
+            a.abilitySprite = sprite == null ? LoadedAssetsHandler.GetEnemy("Mung_EN").abilities[0].ability.abilitySprite : sprite;
             a.visuals = visuals;
+            a.animationTarget = animationTarget;
 
             a.effects = new EffectInfo[effects.Length];
             a.intents = new IntentTargetInfo[effects.Length];
@@ -71,7 +75,7 @@ namespace BrutalAPI
 
                 a.intents[i] = new IntentTargetInfo();
                 a.intents[i].targets = effects[i]._target;
-                a.intents[i].targetIntents = new IntentType[1] { effects[i]._intent };
+                a.intents[i].targetIntents = effects[i]._intent == null ? new IntentType[0] : new IntentType[1] { (IntentType)effects[i]._intent };
             }
             return ability;
         }
@@ -87,6 +91,7 @@ namespace BrutalAPI
             a.effects = new Effect[effects.Length];
             a.rarity = rarity;
             a.canBeRerolled = canBeRerolled;
+            a.animationTarget = animationTarget;
             for (int i = 0; i < effects.Length; i++)
             {
                 a.effects[i] = new Effect(effects[i]);
@@ -98,7 +103,7 @@ namespace BrutalAPI
     }
     public struct Effect
     {
-        public Effect(EffectSO effect, int entryVariable, IntentType intent, BaseCombatTargettingSO target)
+        public Effect(EffectSO effect, int entryVariable, IntentType? intent, BaseCombatTargettingSO target)
         {
             _effect = effect;
             _entryVariable = entryVariable;
@@ -116,7 +121,7 @@ namespace BrutalAPI
 
         public EffectSO _effect;
         public int _entryVariable;
-        public IntentType _intent;
+        public IntentType? _intent;
         public BaseCombatTargettingSO _target;
     }
 }

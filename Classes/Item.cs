@@ -11,6 +11,7 @@ namespace BrutalAPI
         public string description = "This is the description for a new item";
         public Sprite sprite = ResourceLoader.LoadSprite("");
         public bool namePopup = false;
+        public UnlockableID unlockableID = UnlockableID.None;
 
         //Trigger
         public TriggerCalls trigger = TriggerCalls.IsAlive;
@@ -30,6 +31,17 @@ namespace BrutalAPI
         public bool startsLocked = false;
 
         public abstract BaseWearableSO Wearable();
+
+        public void AddItem()
+        {
+            var w = Wearable();
+
+            if (isShopItem) { BrutalAPI.mainMenuController._informationHolder.ItemPoolDB.ShopPool.Add(name); }
+            else { BrutalAPI.mainMenuController._informationHolder.ItemPoolDB.TreasurePool.Add(name); }
+            BrutalAPI.moddedItems.Add(w);
+
+            Debug.Log("Added item " + name);
+        }
     }
 
     public struct ConditionEffect

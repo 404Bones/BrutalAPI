@@ -42,10 +42,11 @@ namespace BrutalAPI
             Right = rightTarget;
         }
 
-        public static BaseCombatTargettingSO SlotTarget(int[] slots)
+        public static BaseCombatTargettingSO SlotTarget(int[] slots, bool targetAllies = false)
         {
             Targetting_BySlot_Index t = ScriptableObject.CreateInstance(typeof(Targetting_BySlot_Index)) as Targetting_BySlot_Index;
             t.slotPointerDirections = slots;
+            t.getAllies = targetAllies;
             return t;
         }
 

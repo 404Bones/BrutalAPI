@@ -21,6 +21,8 @@
     <None Remove="Textures\Mana\GreenManaCostUnselected.png" />
     <None Remove="Textures\Mana\GreenManaHealth.png" />
     <None Remove="Textures\Mana\GreenManaUsed.png" />
+    <None Remove="Textures\Mungbertino\Brace.png" />
+    <None Remove="Textures\Mungbertino\Chew.png" />
     <None Remove="Textures\Mungbertino\MungbertinoBack.png" />
     <None Remove="Textures\Mungbertino\MungbertinoFront.png" />
     <None Remove="Textures\Mungbertino\MungbertinoOverworld.png" />
@@ -33,6 +35,8 @@
     <None Remove="Textures\Mungbert\MungbertLocked.png" />
     <None Remove="Textures\Mungbert\MungbertOverworld.png" />
     <None Remove="Textures\Mungbert\MungbertUnlocked.png" />
+    <None Remove="Textures\Mungbert\MungMeUp.png" />
+    <None Remove="Textures\Mungbert\MungRootBeer.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +54,8 @@
     <EmbeddedResource Include="Textures\Mana\GreenManaCostUnselected.png" />
     <EmbeddedResource Include="Textures\Mana\GreenManaHealth.png" />
     <EmbeddedResource Include="Textures\Mana\GreenManaUsed.png" />
+    <EmbeddedResource Include="Textures\Mungbertino\Brace.png" />
+    <EmbeddedResource Include="Textures\Mungbertino\Chew.png" />
     <EmbeddedResource Include="Textures\Mungbertino\MungbertinoBack.png" />
     <EmbeddedResource Include="Textures\Mungbertino\MungbertinoFront.png" />
     <EmbeddedResource Include="Textures\Mungbertino\MungbertinoOverworld.png" />
@@ -62,6 +68,8 @@
     <EmbeddedResource Include="Textures\Mungbert\MungbertLocked.png" />
     <EmbeddedResource Include="Textures\Mungbert\MungbertOverworld.png" />
     <EmbeddedResource Include="Textures\Mungbert\MungbertUnlocked.png" />
+    <EmbeddedResource Include="Textures\Mungbert\MungMeUp.png" />
+    <EmbeddedResource Include="Textures\Mungbert\MungRootBeer.png" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,14 +8,14 @@ namespace BrutalAPI
         {
             BasicWearable w = ScriptableObject.CreateInstance<BasicWearable>();
             w.BaseWearable(this);
-            w.wearableName = name;
+            w._itemName = name;
             w.triggerOn = trigger;
             w.doesItemPopUp = namePopup;
             w.doesTriggerAttachedActionOnInitialization = false;
             w.getsConsumedOnUse = consumedOnUse;
             w.consumeConditions = consumeConditions;
-            w.description = description;
-            w.flavourText = flavorText;
+            w._description = description;
+            w._flavourText = flavorText;
             w.wearableImage = sprite;
             w.staticModifiers = equippedModifiers;
             w.conditions = triggerConditions;

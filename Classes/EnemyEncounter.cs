@@ -40,7 +40,7 @@ namespace BrutalAPI
                         selector = BrutalAPI.hardAreas[area]._bossBundleSelector;
                         break;
                     default:
-                        Debug.LogError("Could not find bundle selector for area " + BrutalAPI.areas[area].ZoneName);
+                        Debug.LogError("Could not find bundle selector for area " + BrutalAPI.hardAreas[area].ZoneName);
                         selector = new EnemyEncounterSelectorSO();
                         break;
                 }
@@ -49,19 +49,19 @@ namespace BrutalAPI
                 switch (difficulty)
                 {
                     case EncounterDifficulty.Easy:
-                        selector = BrutalAPI.areas[area]._easyEnemyBundleSelector;
+                        selector = BrutalAPI.easyAreas[area]._easyEnemyBundleSelector;
                         break;
                     case EncounterDifficulty.Medium:
-                        selector = BrutalAPI.areas[area]._mediumEnemyBundleSelector;
+                        selector = BrutalAPI.easyAreas[area]._mediumEnemyBundleSelector;
                         break;
                     case EncounterDifficulty.Hard:
-                        selector = BrutalAPI.areas[area]._hardEnemyBundleSelector;
+                        selector = BrutalAPI.easyAreas[area]._hardEnemyBundleSelector;
                         break;
                     case EncounterDifficulty.Boss:
-                        selector = BrutalAPI.areas[area]._bossBundleSelector;
+                        selector = BrutalAPI.easyAreas[area]._bossBundleSelector;
                         break;
                     default:
-                        Debug.LogError("Could not find bundle selector for area " + BrutalAPI.areas[area].ZoneName);
+                        Debug.LogError("Could not find bundle selector for area " + BrutalAPI.easyAreas[area].ZoneName);
                         selector = new EnemyEncounterSelectorSO();
                         break;
                 }

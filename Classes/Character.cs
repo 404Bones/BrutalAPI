@@ -7,7 +7,7 @@ namespace BrutalAPI
     public class Character
     {
         public CharacterSO c = ScriptableObject.CreateInstance(typeof(CharacterSO)) as CharacterSO;
-        public SelectableCharacterData charData = new SelectableCharacterData();
+        public SelectableCharacterData charData = new SelectableCharacterData("Belm", ResourceLoader.LoadSprite("BasicPartyMemberUnlocked"), ResourceLoader.LoadSprite("BasicPartyMemberLocked"));
         const BindingFlags AllFlags = (BindingFlags)(-1);
 
         //Basics
@@ -17,6 +17,7 @@ namespace BrutalAPI
 
         //Abilities
         public bool slapAbility = true;
+        public bool usesAllAbilities = false;
         public BasePassiveAbilitySO[] passives = new BasePassiveAbilitySO[0];
         public CharacterRankedData[] levels = new CharacterRankedData[4];
 
@@ -34,6 +35,10 @@ namespace BrutalAPI
         //Audio
         public string hurtSound = "";
         public string deathSound = "";
+
+        //Unlocks
+        public UnlockableID heavenUnlock = UnlockableID.None;
+        public UnlockableID osmanUnlock = UnlockableID.None;
 
         public void AddLevel(int health, Ability[] abilities, int level)
         {
@@ -59,12 +64,12 @@ namespace BrutalAPI
             charData._isSecret = isSecret;
 
             c.name = charData._characterName;
-            c.characterName = name;
+            c._characterName = name;
             c.characterEntityID = entityID;
             c.healthColor = healthColor;
             c.usesBasicAbility = slapAbility;
             c.basicCharAbility = BrutalAPI.slapCharAbility;
-            c.usesAllAbilities = !slapAbility;
+            c.usesAllAbilities = usesAllAbilities;
             c.rankedData = levels;
             c.passiveAbilities = passives;
             c.characterSprite = frontSprite;
@@ -95,7 +100,17 @@ namespace BrutalAPI
                 LoadedAssetsHandler.LoadedCharacters.Add(charData._characterName, c);
             }
 
-            Debug.Log("Added character " + c.characterName);
+            //Add unlocks
+            if (heavenUnlock != UnlockableID.None)
+            {
+                BrutalAPI.unlockablesDatabase._heavenIDs.Add(entityID, heavenUnlock);
+            }
+            if (osmanUnlock != UnlockableID.None)
+            {
+                BrutalAPI.unlockablesDatabase._osmanIDs.Add(entityID, osmanUnlock);
+            }
+
+            Debug.Log("Added character " + c._characterName);
             BrutalAPI.moddedChars.Add(c);
         }
     }

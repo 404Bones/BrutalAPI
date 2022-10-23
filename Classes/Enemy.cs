@@ -37,7 +37,7 @@ namespace BrutalAPI
 
         public void AddEnemy()
         {
-            e.enemyName = name;
+            e._enemyName = name;
             e.health = health;
             e.size = size;
             e.healthColor = healthColor;
