@@ -19,7 +19,7 @@ namespace BrutalAPI
             mungbert.lockedSprite = ResourceLoader.LoadSprite("MungbertLocked");
             mungbert.unlockedSprite = ResourceLoader.LoadSprite("MungbertUnlocked");
             mungbert.menuChar = true;
-            mungbert.hurtSound = "event:/Characters/Enemies/Mung/CHR_ENM_Mung_Dmg";
+            mungbert.hurtSound = ResourceLoader.LoadSound("testsound");
             mungbert.deathSound = "event:/Characters/Enemies/Mung/CHR_ENM_Mung_Dth";
             mungbert.osmanUnlock = (UnlockableID)45814;
             mungbert.heavenUnlock = (UnlockableID)45813;
@@ -28,7 +28,7 @@ namespace BrutalAPI
             Ability cryAbility0 = new Ability();
             cryAbility0.name = "Sob";
             cryAbility0.description = "Deal 3 damage to the Opposing enemy. Produce 1 blue pigment.";
-            cryAbility0.cost = new ManaColorSO[3] { Pigments.Yellow, Pigments.Blue, Pigments.Blue };
+            cryAbility0.cost = new ManaColorSO[3] { Pigments.Purple, Pigments.SplitPigment(Pigments.Purple, Pigments.Blue), Pigments.Blue };
             cryAbility0.sprite = ResourceLoader.LoadSprite("CryAbility");
             cryAbility0.effects = new Effect[2];
             cryAbility0.effects[0] = new Effect(ScriptableObject.CreateInstance<GenerateColorManaEffect>(),
@@ -36,8 +36,11 @@ namespace BrutalAPI
             ((GenerateColorManaEffect)cryAbility0.effects[0]._effect).mana = Pigments.Blue;
             cryAbility0.effects[1] = new Effect(ScriptableObject.CreateInstance<DamageEffect>(),
                 3, IntentType.Damage_3_6, Slots.Front);
+
             cryAbility0.visuals = LoadedAssetsHandler.GetEnemy("Mung_EN").abilities[1].ability.visuals;
             cryAbility0.animationTarget = Slots.Self;
+
+            mungbert.baseAbility = cryAbility0;
 
             //Attack level 1
             Ability attackAbility0 = new Ability();

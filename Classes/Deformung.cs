@@ -17,7 +17,6 @@ namespace BrutalAPI
             e.healthColor = Pigments.Red;
             e.priority = 0;
             e.prefab = BrutalAPI.brutalAPIassetBundle.LoadAsset<GameObject>("assets/deformung/deformung variant.prefab").AddComponent<EnemyInFieldLayout>();
-            e.prefab.SetDefaultParams();
             e.prefab._gibs = BrutalAPI.brutalAPIassetBundle.LoadAsset<GameObject>("assets/deformung/deformunggibs.prefab").GetComponent<ParticleSystem>();
             e.combatSprite = ResourceLoader.LoadSprite("DeformungCombat", 32);
             e.overworldAliveSprite = ResourceLoader.LoadSprite("DeformungOverworld", 64, new Vector2(0.5f, 0));

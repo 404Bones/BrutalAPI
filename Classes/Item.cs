@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace BrutalAPI
 {
@@ -19,7 +21,7 @@ namespace BrutalAPI
 
         //Consumption
         public bool consumedOnUse = false;
-        public TriggerCalls cosumeTrigger = TriggerCalls.IsAlive;
+        public TriggerCalls consumeTrigger = TriggerCalls.IsAlive;
         public EffectorConditionSO[] consumeConditions = new EffectorConditionSO[0];  
 
         //Effects
@@ -35,36 +37,28 @@ namespace BrutalAPI
         public void AddItem()
         {
             var w = Wearable();
+            var wname = Regex.Replace(name + (isShopItem ? "_SW" : "_TW"), @"\s+", "");
+            w.name = wname;
 
-            if (isShopItem) { BrutalAPI.mainMenuController._informationHolder.ItemPoolDB.ShopPool.Add(name); }
-            else { BrutalAPI.mainMenuController._informationHolder.ItemPoolDB.TreasurePool.Add(name); }
-            BrutalAPI.moddedItems.Add(w);
+            if (isShopItem)
+            {
+                var list = new List<string>(BrutalAPI.mainMenuController._informationHolder.ItemPoolDB._ShopPool);
+                list.Add(wname);
+                BrutalAPI.mainMenuController._informationHolder.ItemPoolDB._ShopPool = list.ToArray();
+            }
+            else
+            {
+                var list = new List<string>(BrutalAPI.mainMenuController._informationHolder.ItemPoolDB._TreasurePool);
+                list.Add(wname);
+                BrutalAPI.mainMenuController._informationHolder.ItemPoolDB._TreasurePool = list.ToArray();
+            }
 
-            Debug.Log("Added item " + name);
+            if (!LoadedAssetsHandler.LoadedWearables.ContainsKey(wname))
+                LoadedAssetsHandler.LoadedWearables.Add(wname, w);
+
+            BrutalAPI.moddedItems.Add(this);
+
+            Debug.Log("Added item " + wname);
         }
-    }
-
-    public struct ConditionEffect
-    {
-        public ConditionEffect(EffectSO effect, int entryVariable, EffectConditionSO condition, BaseCombatTargettingSO target)
-        {
-            _effect = effect;
-            _entryVariable = entryVariable;
-            _condition = condition;
-            _target = target;
-        }
-
-        public ConditionEffect(ConditionEffect effect)
-        {
-            _effect = effect._effect;
-            _entryVariable = effect._entryVariable;
-            _condition = effect._condition;
-            _target = effect._target;
-        }
-
-        public EffectSO _effect;
-        public int _entryVariable;
-        public EffectConditionSO _condition;
-        public BaseCombatTargettingSO _target;
     }
 }

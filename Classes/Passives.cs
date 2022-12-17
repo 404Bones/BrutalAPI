@@ -31,9 +31,13 @@ namespace BrutalAPI
 		public static BasePassiveAbilitySO Abomination;
 		public static BasePassiveAbilitySO Infestation;
 		public static BasePassiveAbilitySO Masochism;
-		public static BasePassiveAbilitySO Fleeing;
+		public static BasePassiveAbilitySO Fleeting;
 		public static BasePassiveAbilitySO Decay;
 		public static BasePassiveAbilitySO UntetheredEssence;
+		public static BasePassiveAbilitySO Cashout;
+		public static BasePassiveAbilitySO Construct;
+		public static BasePassiveAbilitySO BronzosBlessing;
+		public static BasePassiveAbilitySO FinancialHyperinflation;
 
 		public static void Setup()
         {
@@ -79,7 +83,7 @@ namespace BrutalAPI
 						}
 					case "Cranes_CH":
 						{
-							Pure = character.passiveAbilities[0];
+							Pure = character.passiveAbilities[1];
 							break;
 						}
 					case "Bimini_CH":
@@ -107,22 +111,31 @@ namespace BrutalAPI
 							Skittish = character.passiveAbilities[0];
 							break;
 						}
+					case "Doll_CH":
+						{
+							Construct = character.passiveAbilities[0];
+							break;
+						}
 				}
             }
 
 			Unstable = LoadedAssetsHandler.GetEnemy("UnfinishedHeir_BOSS").passiveAbilities[3];
 			Formless = LoadedAssetsHandler.GetEnemy("TriggerFingers_BOSS").passiveAbilities[0];
-			Absorb = LoadedAssetsHandler.GetEnemy("Spoggle_Resonant_EN").passiveAbilities[1];
+			Absorb = LoadedAssetsHandler.GetEnemy("Spoggle_Resonant_EN").passiveAbilities[0];
 			Forgetful = LoadedAssetsHandler.GetEnemy("Ouroboros_Head_BOSS").passiveAbilities[1];
 			Obscured = LoadedAssetsHandler.GetEnemy("WrigglingSacrifice_EN").passiveAbilities[3];
 			Confusion = LoadedAssetsHandler.GetEnemy("Wringle_EN").passiveAbilities[0];
 			Enfeebled = LoadedAssetsHandler.GetEnemy("PitifulCorpse_BOSS").passiveAbilities[1];
-			Anchored = LoadedAssetsHandler.GetEnemy("Keko_EN").passiveAbilities[1];
+			Anchored = LoadedAssetsHandler.GetEnemy("Keko_EN").passiveAbilities[2];
 			Transfusion = LoadedAssetsHandler.GetEnemy("JumbleGuts_Clotted_EN").passiveAbilities[1];
 			Abomination = LoadedAssetsHandler.GetEnemy("OneManBand_EN").passiveAbilities[2];
 			Masochism = LoadedAssetsHandler.GetEnemy("ChoirBoy_EN").passiveAbilities[0];
-			Fleeing = LoadedAssetsHandler.GetEnemy("Keko_EN").passiveAbilities[2];
+			Fleeting = LoadedAssetsHandler.GetEnemy("Keko_EN").passiveAbilities[0];
 			Decay = LoadedAssetsHandler.GetEnemy("MudLung_EN").passiveAbilities[0];
+			FinancialHyperinflation = LoadedAssetsHandler.GetEnemy("Bronzo5_EN").passiveAbilities[1];
+			Cashout = LoadedAssetsHandler.GetEnemy("Bronzo_MoneyPile_EN").passiveAbilities[0];
+			BronzosBlessing = ((AddPassiveEffect)LoadedAssetsHandler.GetEnemy("Bronzo1_EN").enterEffects[3].effect)._passiveToAdd;
+
 			var chordophone = LoadedAssetsHandler.GetEnemy("Chordophone_EN");
             Multiattack = chordophone.passiveAbilities[0];
             Overexert = chordophone.passiveAbilities[1];

@@ -17,7 +17,7 @@ namespace BrutalAPI
             mungbertino.overworldSprite = ResourceLoader.LoadSprite("MungbertinoOverworld", 32, new Vector2(0.5f, 0));
             mungbertino.menuChar = false;
             mungbertino.usesAllAbilities = true;
-            mungbertino.slapAbility = true;
+            mungbertino.usesBaseAbility = true;
             mungbertino.passives = new BasePassiveAbilitySO[1] { Passives.Withering };
             mungbertino.hurtSound = "event:/Characters/Enemies/Mung/CHR_ENM_Mung_Dmg";
             mungbertino.deathSound = "event:/Characters/Enemies/Mung/CHR_ENM_Mung_Dth";

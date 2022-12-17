@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "+gLuNoOlxnsHoriZlaKPNiQ8WuazBBmhE2tOEi4TXi4AojrURo69BBf3ecKyButl92I5X24Sbtk0i84aMXD8nQ==",
+  "dgSpecHash": "+atGloUommoj92khzYJ6oSa2bl9dO3k3RkhrqruAWq3Gc5HzAOiamPm7ZXnHDKtwWGM604dUeHkQI29CMgLftA==",
   "success": true,
   "projectFilePath": "D:\\Visual Studio Repos\\BrutalAPI\\BrutalAPI.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\green\\.nuget\\packages\\assetstools.net\\2.0.12\\assetstools.net.2.0.12.nupkg.sha512",
     "C:\\Users\\green\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\green\\.nuget\\packages\\mono.cecil\\0.11.3\\mono.cecil.0.11.3.nupkg.sha512",
     "C:\\Users\\green\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
   ],
   "logs": []

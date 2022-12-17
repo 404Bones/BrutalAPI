@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 namespace BrutalAPI
 {
     public class Enemy
     {
-        private EnemySO e = ScriptableObject.CreateInstance(typeof(EnemySO)) as EnemySO;
         const BindingFlags AllFlags = (BindingFlags)(-1);
 
         //Basics
@@ -23,8 +23,8 @@ namespace BrutalAPI
         public BasePassiveAbilitySO[] passives = new BasePassiveAbilitySO[0];
         public Ability[] abilities = new Ability[0];
         public EnemyInFieldLayout prefab = new EnemyInFieldLayout();
-        public ConditionEffect[] enterEffects = new ConditionEffect[0];
-        public ConditionEffect[] exitEffects = new ConditionEffect[0];
+        public Effect[] enterEffects = new Effect[0];
+        public Effect[] exitEffects = new Effect[0];
 
         //Visuals
         public Sprite combatSprite = ResourceLoader.LoadSprite("DeformungCombat");
@@ -37,6 +37,10 @@ namespace BrutalAPI
 
         public void AddEnemy()
         {
+            EnemySO e = ScriptableObject.CreateInstance(typeof(EnemySO)) as EnemySO;
+            string ename = Regex.Replace(name + "_EN", @"\s+", "");
+            e.name = ename;
+
             e._enemyName = name;
             e.health = health;
             e.size = size;
@@ -46,10 +50,11 @@ namespace BrutalAPI
             e.enemySprite = combatSprite;
             e.abilitySelector = abilitySelector;
             e.passiveAbilities = passives;
-            e.enterEffects = enterEffects.ConditionEffectInfoArray();
-            e.exitEffects = exitEffects.ConditionEffectInfoArray();
+            e.enterEffects = ExtensionMethods.ToEffectInfoArray(enterEffects);
+            e.exitEffects = ExtensionMethods.ToEffectInfoArray(exitEffects);
             e.damageSound = hurtSound;
             e.deathSound = deathSound;
+            prefab.SetDefaultParams();
             e.enemyTemplate = prefab;
             e.priority = ScriptableObject.CreateInstance(typeof(PrioritySO)) as PrioritySO;
             e.priority.priorityValue = priority;
@@ -64,8 +69,8 @@ namespace BrutalAPI
 
             e.enemyLoot = new EnemyLoot() { _lootableItems = loot };
 
-            LoadedAssetsHandler.LoadedEnemies.Add(name + "_EN", e);
-            Debug.Log("Added enemy " + name + "_EN");
+            LoadedAssetsHandler.LoadedEnemies.Add(ename, e);
+            Debug.Log("Added enemy " + ename);
             BrutalAPI.moddedEnemies.Add(e);
         }
     }

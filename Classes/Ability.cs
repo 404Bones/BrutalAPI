@@ -38,6 +38,7 @@ namespace BrutalAPI
                 ei.entryVariable = effects[i]._entryVariable;
                 ei.effect = effects[i]._effect;
                 ei.targets = effects[i]._target;
+                ei.condition = effects[i]._condition;
                 a.effects[i] = ei;
 
                 a.intents[i] = new IntentTargetInfo();
@@ -71,6 +72,7 @@ namespace BrutalAPI
                 ei.entryVariable = effects[i]._entryVariable;
                 ei.effect = effects[i]._effect;
                 ei.targets = effects[i]._target;
+                ei.condition = effects[i]._condition;
                 a.effects[i] = ei;
 
                 a.intents[i] = new IntentTargetInfo();
@@ -103,12 +105,13 @@ namespace BrutalAPI
     }
     public struct Effect
     {
-        public Effect(EffectSO effect, int entryVariable, IntentType? intent, BaseCombatTargettingSO target)
+        public Effect(EffectSO effect, int entryVariable, IntentType? intent, BaseCombatTargettingSO target, EffectConditionSO condition = null)
         {
             _effect = effect;
             _entryVariable = entryVariable;
             _intent = intent;
             _target = target;
+            _condition = condition;
         }
 
         public Effect(Effect effect)
@@ -117,11 +120,13 @@ namespace BrutalAPI
             _entryVariable = effect._entryVariable;
             _intent = effect._intent;
             _target = effect._target;
+            _condition= effect._condition;
         }
 
         public EffectSO _effect;
         public int _entryVariable;
         public IntentType? _intent;
         public BaseCombatTargettingSO _target;
+        public EffectConditionSO _condition;
     }
 }

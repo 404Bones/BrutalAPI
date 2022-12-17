@@ -6,11 +6,9 @@ D:\Visual Studio Repos\BrutalAPI\obj\Debug\netstandard2.0\BrutalAPI.csproj.CoreC
 D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\BrutalAPI.deps.json
 D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\BrutalAPI.dll
 D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\BrutalAPI.pdb
-D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\Assembly-CSharp.dll
 D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\BepInEx.dll
 D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\FMODUnity.dll
 D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\MMHOOK_Assembly-CSharp.dll
-D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\Mono.Cecil.dll
 D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\MonoMod.RuntimeDetour.dll
 D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\Unity.InputSystem.dll
 D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\Unity.TextMeshPro.dll
@@ -28,3 +26,11 @@ D:\Visual Studio Repos\BrutalAPI\obj\Debug\netstandard2.0\BrutalAPI.csproj.CopyC
 D:\Visual Studio Repos\BrutalAPI\obj\Debug\netstandard2.0\BrutalAPI.dll
 D:\Visual Studio Repos\BrutalAPI\obj\Debug\netstandard2.0\BrutalAPI.pdb
 D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\Album.dll
+D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\Marosi.SerializableCollections.dll
+D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\Marosi.Utility.dll
+D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\UnityEngine.Physics2DModule.dll
+D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\UnityEngine.PhysicsModule.dll
+D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\UnityEngine.IMGUIModule.dll
+D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\UnityEngine.InputLegacyModule.dll
+D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\UnityEngine.SharedInternalsModule.dll
+D:\Visual Studio Repos\BrutalAPI\bin\Debug\netstandard2.0\UnityEngine.AudioModule.dll

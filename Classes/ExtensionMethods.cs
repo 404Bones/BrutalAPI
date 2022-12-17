@@ -7,20 +7,6 @@ namespace BrutalAPI
 {
     public static class ExtensionMethods
     { 
-        public static EffectInfo[] ConditionEffectInfoArray(this ConditionEffect[] effect)
-        {
-            EffectInfo[] ei = new EffectInfo[effect.Length];
-            for (int i = 0; i < effect.Length; i++)
-            {
-                ei[i] = new EffectInfo();
-                ei[i].entryVariable = effect[i]._entryVariable;
-                ei[i].effect = effect[i]._effect;
-                ei[i].targets = effect[i]._target;
-                ei[i].condition = effect[i]._condition;
-            }
-            return ei;
-        }
-
         public static void SetDefaultParams(this EnemyInFieldLayout e)
         {
             e._rootTransform = e.gameObject.GetComponent<Transform>();
@@ -40,35 +26,39 @@ namespace BrutalAPI
 
         public static void BaseWearable(this BaseWearableSO w, Item item)
         {
+            //Base
             w._itemName = item.name;
-            w.triggerOn = item.trigger;
-            w.doesItemPopUp = item.namePopup;
-            w.doesTriggerAttachedActionOnInitialization = false;
-            w.getsConsumedOnUse = item.consumedOnUse;
-            w.consumeConditions = item.consumeConditions;
             w._description = item.description;
             w._flavourText = item.flavorText;
             w.wearableImage = item.sprite;
-            w.staticModifiers = item.equippedModifiers;
-            w.conditions = item.triggerConditions;
             w.shopPrice = item.shopPrice;
             w.isShopItem = item.isShopItem;
             w.startsLocked = item.startsLocked;
+
+            //Trigger
+            w.triggerOn = item.trigger;
+            w.conditions = item.triggerConditions;
+
+            //Consume Trigger
+            w.consumeOnTrigger = item.consumeTrigger;
+            w.consumeConditions = item.consumeConditions;
+            w.getsConsumedOnUse = item.consumedOnUse;
+
+            //Things
+            w.doesItemPopUp = item.namePopup;
+            w.doesTriggerAttachedActionOnInitialization = false;
+            w.staticModifiers = item.equippedModifiers;
             w.usesTheOnUnlockText = false;
 
             UnlockableData data = new UnlockableData { items = new string[1] { item.name }, hasItemUnlock = true };
             BrutalAPI.unlockablesDatabase._unlockables.Add(item.unlockableID, data);
         }
 
-        public static string[] Add(this string[] stringArray, string addedString)
+        public static void Add(this string[] stringArray, string addedString)
         {
-            List<string> list = new List<string>();
-            foreach (string i in stringArray)
-            {
-                list.Add(i);
-            }
+            List<string> list = new List<string>(stringArray);
             list.Add(addedString);
-            return list.ToArray();
+            stringArray = list.ToArray();
         }
 
         public static int CountColorPigment(this ManaBar manaBar, ManaColorSO mana)
@@ -81,6 +71,21 @@ namespace BrutalAPI
             }
 
             return amount;
+        }
+
+        public static EffectInfo[] ToEffectInfoArray(Effect[] effects)
+        {
+            EffectInfo[] effectInfoArray = new EffectInfo[effects.Length];
+            for (int i = 0; i < effects.Length; i++)
+            {
+                EffectInfo ei = new EffectInfo();
+                ei.entryVariable = effects[i]._entryVariable;
+                ei.effect = effects[i]._effect;
+                ei.targets = effects[i]._target;
+                ei.condition = effects[i]._condition;
+                effectInfoArray[i] = ei;
+            }
+            return effectInfoArray;
         }
     }
 }

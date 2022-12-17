@@ -23,7 +23,7 @@ namespace BrutalAPI
             e._rank = 0;
             e._extraModifiers = new WearableStaticModifierSetterSO[0];
             e._permanentSpawn = true;
-            i.effects = new ConditionEffect[1] { new ConditionEffect(e, 1, null, Slots.Self) };
+            i.effects = new Effect[1] { new Effect(e, 1, null, Slots.Self) };
             i.unlockableID = (UnlockableID)45813;
             i.AddItem();
         }
