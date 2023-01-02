@@ -30,6 +30,7 @@ namespace BrutalAPI
         public static DebugCommand LEVELUP;
         public static DebugCommand MONEY;
         public static DebugCommand TP;
+        public static DebugCommand KILL;
 
         public static DebugController Instance
         {
@@ -254,19 +255,43 @@ namespace BrutalAPI
             });
 
             //Teleport command
-            TP = new DebugCommand("tp", "Teleports you to an area.", "tp <areaID>", (string[] parameters) =>
+            TP = new DebugCommand("tp", "Teleports you to an area.", "tp <areaID> <restartArea>", (string[] parameters) =>
             {
-                if (parameters == null || parameters.Length != 1)
+                if (parameters == null || parameters.Length != 2)
                 { WriteLine("Syntax error: " + TP.commandFormat); return; }
 
                 int ID;
+                bool reroll;
 
                 if (!int.TryParse(parameters[0], out ID))
                 { WriteLine("Area ID is not a number"); return; }
 
-                BrutalAPI.ChangeArea((Areas)ID);
+                if (!bool.TryParse(parameters[1], out reroll))
+                { WriteLine("Restart Area is not true or false"); return; }
+
+                BrutalAPI.ChangeArea((Areas)ID, reroll);
 
                 { WriteLine("Teleported to " + BrutalAPI.mainMenuController._informationHolder.Run.CurrentZoneDB.ZoneName); return; }
+            });
+
+            //KILL
+            KILL = new DebugCommand("KILL", "KILL.", "KILL", (string[] parameters) =>
+            {
+                if (parameters == null || parameters.Length != 0)
+                { WriteLine("Syntax error: " + KILL.commandFormat); return; }
+
+                if (!CombatManager.Instance._combatInitialized)
+                { WriteLine("CAN'T KILL OUT OF COMBAT :(("); return; }
+
+                Targetting_ByUnit_Side target = ScriptableObject.CreateInstance<Targetting_ByUnit_Side>();
+                target.getAllies = false;
+
+                Effect killdmg = new Effect(ScriptableObject.CreateInstance<DamageEffect>(), 9999, IntentType.Damage_Death, target);
+
+                CombatManager.Instance.AddPriorityRootAction(new EffectAction(ExtensionMethods.ToEffectInfoArray(new Effect[1] { killdmg }),
+                    CombatManager.Instance._stats.CharactersOnField.First().Value));
+
+                { WriteLine("KILL :)))"); return; }
             });
 
             commandList = new List<DebugCommand>
@@ -279,7 +304,8 @@ namespace BrutalAPI
                 HEAL,
                 LEVELUP,
                 MONEY,
-                TP
+                TP,
+                KILL
             };
 
             Debug.Log("Debug Console Ready");
@@ -336,7 +362,7 @@ namespace BrutalAPI
             {
                 if (commandstr[0] == commandList[i].commandId)
                 {
-                    if (parameters.Length <= 0 && commandstr[0] != "help")
+                    if (parameters.Length <= 0 && commandstr[0] != "help" && commandstr[0] != "KILL")
                         WriteLine("No parameters given for the specified command");
                     else
                         commandList[i].Invoke(parameters);

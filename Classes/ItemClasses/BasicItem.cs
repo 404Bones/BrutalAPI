@@ -20,7 +20,7 @@ namespace BrutalAPI
             w.staticModifiers = equippedModifiers;
             w.conditions = triggerConditions;
             w.shopPrice = shopPrice;
-            w.isShopItem = isShopItem;
+            w.isShopItem = itemPools.HasFlag(ItemPools.Shop);
             w.startsLocked = startsLocked;
             w.usesTheOnUnlockText = false;
             return w;

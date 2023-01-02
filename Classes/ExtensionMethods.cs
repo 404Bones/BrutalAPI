@@ -32,7 +32,7 @@ namespace BrutalAPI
             w._flavourText = item.flavorText;
             w.wearableImage = item.sprite;
             w.shopPrice = item.shopPrice;
-            w.isShopItem = item.isShopItem;
+            w.isShopItem = item.itemPools.HasFlag(ItemPools.Shop);
             w.startsLocked = item.startsLocked;
 
             //Trigger

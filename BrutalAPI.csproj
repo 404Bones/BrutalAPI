@@ -69,7 +69,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="brutalapi" />
-    <EmbeddedResource Include="testsound.wav" />
     <EmbeddedResource Include="Textures\BasicPartyMember\BasicPartyMemberBack.png" />
     <EmbeddedResource Include="Textures\BasicPartyMember\BasicPartyMemberFront.png" />
     <EmbeddedResource Include="Textures\BasicPartyMember\BasicPartyMemberLocked.png" />

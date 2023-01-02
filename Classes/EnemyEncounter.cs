@@ -14,6 +14,8 @@ namespace BrutalAPI
         public int area = (int)Areas.FarShore;
         public int rarity = 10;
         public SignType signType = SignType.None;
+        public BossType bossType = BossType.None;
+        public Sprite bossBackground = null;
 
         public string roarEvent = "";
         public string musicEvent = "";
@@ -120,7 +122,7 @@ namespace BrutalAPI
             generator._roarReference = new RoarData(roarEvent);
             generator._musicEventReference = musicEvent;
             generator._preCombatDialogueEventReference = "";
-            generator._bossType = BossType.None;
+            generator._bossType = bossType;
             generator._customRoomPrefab = "";
             generator._bundleSignType = signType;
 
@@ -145,6 +147,14 @@ namespace BrutalAPI
                 }
             }
 
+            //Boss BG
+            if (bossType != BossType.None)
+            {
+                var bossBGList = new List<SpecialBackgroundsDataBaseSO.BossBackgroundData>(BrutalAPI.backgroundDatabase._bossData);
+                bossBGList.Add(new SpecialBackgroundsDataBaseSO.BossBackgroundData() { background = bossBackground, bossType = bossType });
+                BrutalAPI.backgroundDatabase._bossData = bossBGList.ToArray();
+            }
+            
             Debug.Log("Added " + encounterName + " encounter");
         }
 

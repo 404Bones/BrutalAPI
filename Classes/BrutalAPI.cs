@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace BrutalAPI
 {
-    [BepInPlugin("Bones404.BrutalAPI", "BrutalAPI", "1.0.0")]
+    [BepInPlugin("Bones404.BrutalAPI", "BrutalAPI", "1.0.2")]
     [BepInDependency("Bones404.Album", BepInDependency.DependencyFlags.SoftDependency)]
     public class BrutalAPI : BaseUnityPlugin
     {
@@ -25,6 +25,7 @@ namespace BrutalAPI
         public static MainMenuController mainMenuController;
         public static UnlockablesDatabase unlockablesDatabase;
         public static OverworldManagerBG overworldManager;
+        public static SpecialBackgroundsDataBaseSO backgroundDatabase;
 
         public static List<CharacterSO> vanillaChars = new List<CharacterSO>();
         public static List<CharacterSO> moddedChars = new List<CharacterSO>();
@@ -47,6 +48,49 @@ namespace BrutalAPI
 
         public DebugController debug;
 
+        internal static List<LootItemProbability> fishingRodLoot
+        {
+            get
+            {
+                return new List<LootItemProbability>(((ExtraLootListEffect)((PerformEffectWearable)LoadedAssetsHandler.GetWearable("FishingRod_TW")).effects[0].effect)._lootableItems);
+            }
+            set
+            {
+                ((ExtraLootListEffect)((PerformEffectWearable)LoadedAssetsHandler.GetWearable("FishingRod_TW")).effects[0].effect)._lootableItems = value.ToArray();
+            }
+        }
+        internal static List<LootItemProbability> canOfWormsLoot
+        {
+            get
+            {
+                return new List<LootItemProbability>(((ExtraLootListEffect)((PerformEffectWearable)LoadedAssetsHandler.GetWearable("CanOfWorms_SW")).effects[0].effect)._lootableItems);
+            }
+            set
+            {
+                ((ExtraLootListEffect)((PerformEffectWearable)LoadedAssetsHandler.GetWearable("CanOfWorms_SW")).effects[0].effect)._lootableItems = value.ToArray();
+            }
+        }
+        internal static List<LootItemProbability> welsCatfishLoot
+        {
+            get
+            {
+                return new List<LootItemProbability>(((ExtraLootListEffect)((PerformEffectWithConsumeEffectWearable)LoadedAssetsHandler.GetWearable("WelsCatfish_ExtraW"))._consumptionEffects[0].effect)._lootableItems);
+            }
+            set
+            {
+                ((ExtraLootListEffect)((PerformEffectWithConsumeEffectWearable)LoadedAssetsHandler.GetWearable("WelsCatfish_ExtraW"))._consumptionEffects[0].effect)._lootableItems = value.ToArray();
+            }
+        }
+
+        internal static List<LootItemProbability> _fishLootPool = new List<LootItemProbability>(fishingRodLoot);
+        public static LootItemProbability[] FishLootPool
+        {
+            get
+            {
+                return _fishLootPool.ToArray();
+            }
+        }
+
         /* BIG TODO:
         - Blue Portals (Free Fools and NPC Dialogue)
         - Quests
@@ -61,6 +105,12 @@ namespace BrutalAPI
         */
 
         /* CHANGELOG
+         - Changed how item pools work
+         - Added fish pool
+         - Character can now have a different ID and name
+         - You can now add boss gate background images
+         - TP command now has an extra parameter to reroll areas
+         - Chance condition can now be used for items and effects
          */
 
         public void Awake()
@@ -109,16 +159,19 @@ namespace BrutalAPI
             {
                 mainMenuController = mmc[i];
             }
-            if(mainMenuController == null)
-            { 
-                
-            }
 
             //Find overworld manager
             OverworldManagerBG[] ombg = Resources.FindObjectsOfTypeAll<OverworldManagerBG>();
             for (int i = 0; i < ombg.Length; i++)
             {
                 overworldManager = ombg[i];
+            }
+
+            //Find background manager
+            SpecialBackgroundsDataBaseSO[] bgdb = Resources.FindObjectsOfTypeAll<SpecialBackgroundsDataBaseSO>();
+            for (int i = 0; i < bgdb.Length; i++)
+            {
+                backgroundDatabase = bgdb[i];
             }
 
             //Register easy areas
@@ -210,8 +263,7 @@ namespace BrutalAPI
             }
             foreach (Item i in moddedItems)
             {
-                var wname = Regex.Replace(i.name + (i.isShopItem ? "_SW" : "_TW"), @"\s+", "");
-                self.SavedGameData._unlockedItems.Add(wname);
+                self.SavedGameData._unlockedItems.Add(i.wName);
             }
         }
 
@@ -219,13 +271,9 @@ namespace BrutalAPI
         {
             orig(self);
             overworldManager = self;
-            foreach (var item in BrutalAPI.mainMenuController._informationHolder.ItemPoolDB._TreasurePool)
-            {
-                Debug.Log(item);
-            }  
         }
 
-        public static void ChangeArea(Areas areaID)
+        public static void ChangeArea(Areas areaID, bool rerollArea = false)
         {
             if (overworldManager._zoneBeingLoaded)
             {
@@ -235,14 +283,9 @@ namespace BrutalAPI
             overworldManager._soundManager.ReleaseOverworldMusic();
             RunDataSO run = overworldManager._informationHolder.Run;
             ZoneDataBaseSO currentZoneDB = run.CurrentZoneDB;
-            bool isFullyExplored = run.CurrentZoneData.IsFullyExplored;
-            bool boolData = run.inGameData.GetBoolData(currentZoneDB.ZoneName.ToString() + Tools.DataUtils.hasCasualtiesVar);
-            overworldManager._informationHolder.UnlockableManager.TryBeatZone(currentZoneDB.ZoneName, boolData, overworldManager._informationHolder.HardMode, isFullyExplored);
-            if (!boolData && overworldManager._informationHolder.HardMode)
-            {
-                overworldManager._informationHolder.Game.SetBoolData(currentZoneDB.ZoneName.ToString() + Tools.DataUtils.noCasualtiesVar, true);
-            }
             run._currentZoneID = (int)areaID;
+            if (rerollArea)
+                run.ResetZoneData();
             string nextSceneName = overworldManager._mainMenuSceneName;
             if (run.DoesCurrentZoneExist)
             {
@@ -271,7 +314,7 @@ namespace BrutalAPI
             StatusEffectInfoSO newgutted;
             self._stats.statusEffectDataBase.TryGetValue(StatusEffectType.Gutted, out newgutted);
             newgutted.icon = ResourceLoader.LoadSprite("GuttedIcon", 32);
-            newgutted._description = "Damage taken while Gutted will also decrease maximum health.\nHealing while at full health while gutted will increase maximum health.\nDecrease Gutted by 1 at the end of each turn.";
+            newgutted._description = "While gutted maximum health is always equal to current health.\nHealing while gutted will increase maximum health.\nDecrease Gutted by 1 at the end of each turn.";
             newgutted._applied_SE_Event = self._stats.statusEffectDataBase[StatusEffectType.Ruptured].AppliedSoundEvent;
             newgutted._removed_SE_Event = self._stats.statusEffectDataBase[StatusEffectType.Ruptured].RemovedSoundEvent;
             self._stats.statusEffectDataBase[StatusEffectType.Gutted] = newgutted;

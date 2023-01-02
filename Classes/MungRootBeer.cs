@@ -13,7 +13,7 @@ namespace BrutalAPI
             i.sprite = ResourceLoader.LoadSprite("MungRootBeer");
             i.namePopup = false;
             i.consumedOnUse = false;
-            i.isShopItem = false;
+            i.itemPools = ItemPools.Shop;
             i.startsLocked = false;
             i.immediate = true;
             i.unlockableID = (UnlockableID)45814;

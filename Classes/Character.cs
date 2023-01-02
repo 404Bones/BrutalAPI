@@ -12,6 +12,7 @@ namespace BrutalAPI
 
         //Basics
         public string name = "Belm";
+        public string characterID = "";
         public EntityIDs entityID;
         public ManaColorSO healthColor = Pigments.Purple;
 
@@ -60,7 +61,7 @@ namespace BrutalAPI
         public void AddCharacter()
         {
             charData.LoadedCharacter = c;
-            charData._characterName = name + "_CH";
+            charData._characterName = characterID == "" ? name + "_CH" : characterID;
             if (menuChar)
             {
                 charData._portrait = unlockedSprite;

@@ -11,8 +11,8 @@ namespace BrutalAPI
             encounter.area = (int)Areas.FarShore;
             encounter.randomPlacement = true;
             encounter.hardmodeEncounter = true;
-            encounter.difficulty = EncounterDifficulty.Easy;
-            encounter.rarity = 1000;
+            encounter.difficulty = EncounterDifficulty.Hard;
+            encounter.rarity = 5;
             encounter.variations = new FieldEnemy[2][];
             encounter.signType = (SignType)1412;
             encounter.musicEvent = LoadedAssetsHandler.GetEnemyBundle("H_Zone01_MunglingMudLung_Easy_EnemyBundle")._musicEventReference;

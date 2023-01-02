@@ -14,7 +14,7 @@ namespace BrutalAPI
             i.trigger = TriggerCalls.OnDeath;
             i.namePopup = true;
             i.consumedOnUse = true;
-            i.isShopItem = false;
+            i.itemPools = ItemPools.Treasure;
             i.startsLocked = false;
             i.immediate = false;
             CopyAndSpawnCustomCharacterAnywhereEffect e = ScriptableObject.CreateInstance<CopyAndSpawnCustomCharacterAnywhereEffect>();
