@@ -101,6 +101,12 @@ namespace BrutalAPI
             if (!LoadedAssetsHandler.LoadedWearables.ContainsKey(wName))
                 LoadedAssetsHandler.LoadedWearables.Add(wName, w);
 
+            if (unlockableID != UnlockableID.None)
+            {
+                UnlockableData data = new UnlockableData { items = new string[1] { name }, hasItemUnlock = true };
+                BrutalAPI.unlockablesDatabase._unlockables.Add(unlockableID, data);
+            }
+
             BrutalAPI.moddedItems.Add(this);
 
             Debug.Log("Added item " + wName);

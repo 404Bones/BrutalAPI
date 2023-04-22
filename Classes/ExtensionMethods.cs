@@ -48,10 +48,7 @@ namespace BrutalAPI
             w.doesItemPopUp = item.namePopup;
             w.doesTriggerAttachedActionOnInitialization = false;
             w.staticModifiers = item.equippedModifiers;
-            w.usesTheOnUnlockText = false;
-
-            UnlockableData data = new UnlockableData { items = new string[1] { item.name }, hasItemUnlock = true };
-            BrutalAPI.unlockablesDatabase._unlockables.Add(item.unlockableID, data);
+            w.usesTheOnUnlockText = true;
         }
 
         public static void Add(this string[] stringArray, string addedString)

@@ -13,13 +13,13 @@ namespace BrutalAPI
         public static ManaColorSO Green;
 
         private static Dictionary<ManaColorSO[], ManaColorSO> splitCosts = new Dictionary<ManaColorSO[], ManaColorSO>();
+        public static Dictionary<PigmentType, ManaColorSO> PigmentDatabase = new Dictionary<PigmentType, ManaColorSO>();
 
         public static void Setup()
         {
 
             CharacterDataBase charDataBase = LoadedAssetsHandler.GetCharacterDB();
             List<string> charNamelist = charDataBase._characters;
-
 
             foreach (string i in charNamelist)
             {
@@ -94,6 +94,13 @@ namespace BrutalAPI
             Green.manaCostSprite = ResourceLoader.LoadSprite("GreenManaCostUnselected");
             Green.manaSoundEvent = Red.manaSoundEvent;
             Green.healthSprite = ResourceLoader.LoadSprite("GreenManaHealth");
+
+            PigmentDatabase.Add(PigmentType.Red, Red);
+            PigmentDatabase.Add(PigmentType.Yellow, Yellow);
+            PigmentDatabase.Add(PigmentType.Blue, Blue);
+            PigmentDatabase.Add(PigmentType.Purple, Purple);
+            PigmentDatabase.Add(PigmentType.Grey, Gray);
+            PigmentDatabase.Add(PigmentType.Green, Green);
         }
 
         public static ManaColorSO SplitPigment(ManaColorSO mana1, ManaColorSO mana2)

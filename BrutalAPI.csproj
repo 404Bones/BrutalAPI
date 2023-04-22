@@ -9,6 +9,7 @@
   <ItemGroup>
     <None Remove="brutalapi" />
     <None Remove="testsound.wav" />
+    <None Remove="Textures\Acid.png" />
     <None Remove="Textures\BasicPartyMember\BasicPartyMemberBack.png" />
     <None Remove="Textures\BasicPartyMember\BasicPartyMemberFront.png" />
     <None Remove="Textures\BasicPartyMember\BasicPartyMemberLocked.png" />
@@ -69,6 +70,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="brutalapi" />
+    <EmbeddedResource Include="Textures\Acid.png" />
     <EmbeddedResource Include="Textures\BasicPartyMember\BasicPartyMemberBack.png" />
     <EmbeddedResource Include="Textures\BasicPartyMember\BasicPartyMemberFront.png" />
     <EmbeddedResource Include="Textures\BasicPartyMember\BasicPartyMemberLocked.png" />

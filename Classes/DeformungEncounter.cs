@@ -9,12 +9,12 @@ namespace BrutalAPI
             EnemyEncounter encounter = new EnemyEncounter();
             encounter.encounterName = "Deformung_Hard_Miniboss";
             encounter.area = (int)Areas.FarShore;
-            encounter.randomPlacement = true;
+            encounter.randomPlacement = false;
             encounter.hardmodeEncounter = true;
-            encounter.difficulty = EncounterDifficulty.Hard;
-            encounter.rarity = 5;
+            encounter.difficulty = EncounterDifficulty.Easy;
+            encounter.rarity = 1000;
             encounter.variations = new FieldEnemy[2][];
-            encounter.signType = (SignType)1412;
+            encounter.signType = (SignType)49174;
             encounter.musicEvent = LoadedAssetsHandler.GetEnemyBundle("H_Zone01_MunglingMudLung_Easy_EnemyBundle")._musicEventReference;
             encounter.roarEvent = LoadedAssetsHandler.GetEnemyBundle("H_Zone01_MunglingMudLung_Easy_EnemyBundle")._roarReference.roarEvent;
 

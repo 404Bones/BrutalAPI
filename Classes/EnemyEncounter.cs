@@ -17,6 +17,11 @@ namespace BrutalAPI
         public BossType bossType = BossType.None;
         public Sprite bossBackground = null;
 
+        public string customEnvironment = null;
+        public string customRoom = null;
+        public string dialogueReference = null;
+        public VsBossData VsSplash = null;
+
         public string roarEvent = "";
         public string musicEvent = "";
 
@@ -77,7 +82,9 @@ namespace BrutalAPI
 
             //Add to LoadedAssetsHandler
             BaseBundleGeneratorSO generator;
-            if (randomPlacement) //Random placement
+
+            //Random placement
+            if (randomPlacement) 
             {
                 generator = ScriptableObject.CreateInstance<RandomEnemyBundleSO>();
 
@@ -105,6 +112,8 @@ namespace BrutalAPI
                 //Set group per variation
                 for (int i = 0; i < groups.Length; i++)
                 {
+                    groups[i] = new SpecificEnemyGroup();
+
                     //Set info for each enemy in variation
                     SpecificEnemyInfo[] info = new SpecificEnemyInfo[variations[i].Length];
                     for (int j = 0; j < info.Length; j++)
@@ -112,13 +121,20 @@ namespace BrutalAPI
                         info[j].enemyName = variations[i][j].enemyName;
                         info[j].enemySlot = variations[i][j].enemySlot;
                     }
+                    groups[i]._enemyGroup = info;
                 }
+                
                 ((SpecificEnemyBundleSO)generator)._enemyBundles = groups;
             }
 
-            generator._usesCustomRoomPrefab = false;
-            generator._usesDialogueEvent = false;
-            generator._usesSpecialEnvironment = false;
+            generator._usesCustomRoomPrefab = customRoom != null;
+            generator._usesSpecialEnvironment = customEnvironment != null;
+            generator._usesDialogueEvent = dialogueReference != null;
+
+            generator._customRoomPrefab = customRoom;
+            generator._specialCombatEnvironment = customEnvironment;
+            generator._preCombatDialogueEventReference = dialogueReference;
+
             generator._roarReference = new RoarData(roarEvent);
             generator._musicEventReference = musicEvent;
             generator._preCombatDialogueEventReference = "";
@@ -130,13 +146,12 @@ namespace BrutalAPI
 
             if (randomPlacement)
             {
-                BaseBundleGeneratorSO bundle = LoadedAssetsHandler.GetEnemyBundle(encounterName);
-                RandomEnemyBundleSO ranbu = bundle as RandomEnemyBundleSO;
-                if (ranbu == null || ranbu.Equals(null))
+                RandomEnemyBundleSO bundle = LoadedAssetsHandler.GetEnemyBundle(encounterName) as RandomEnemyBundleSO;
+                if (bundle == null || bundle.Equals(null))
                 {
                     Debug.LogError("Random bundle is null");
                 }
-                foreach (RandomEnemyGroup item in ranbu._enemyBundles)
+                foreach (RandomEnemyGroup item in bundle._enemyBundles)
                 {
                     foreach (string name in item.EnemyNames)
                     {
@@ -152,9 +167,12 @@ namespace BrutalAPI
             {
                 var bossBGList = new List<SpecialBackgroundsDataBaseSO.BossBackgroundData>(BrutalAPI.backgroundDatabase._bossData);
                 bossBGList.Add(new SpecialBackgroundsDataBaseSO.BossBackgroundData() { background = bossBackground, bossType = bossType });
-                BrutalAPI.backgroundDatabase._bossData = bossBGList.ToArray();
+                BrutalAPI.backgroundDatabase._bossData = bossBGList.ToArray();    
             }
-            
+
+            if (VsSplash != null)
+                BrutalAPI.overworldManager._vsPopUpDB._vsData.Add(bossType, VsSplash);
+
             Debug.Log("Added " + encounterName + " encounter");
         }
 

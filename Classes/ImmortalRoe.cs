@@ -14,7 +14,8 @@ namespace BrutalAPI
             i.trigger = TriggerCalls.OnDeath;
             i.namePopup = true;
             i.consumedOnUse = true;
-            i.itemPools = ItemPools.Treasure;
+            i.itemPools = ItemPools.Fish;
+            i.fishRarity = 1000;
             i.startsLocked = false;
             i.immediate = false;
             CopyAndSpawnCustomCharacterAnywhereEffect e = ScriptableObject.CreateInstance<CopyAndSpawnCustomCharacterAnywhereEffect>();
@@ -24,7 +25,7 @@ namespace BrutalAPI
             e._extraModifiers = new WearableStaticModifierSetterSO[0];
             e._permanentSpawn = true;
             i.effects = new Effect[1] { new Effect(e, 1, null, Slots.Self) };
-            i.unlockableID = (UnlockableID)45813;
+            i.unlockableID = UnlockableID.None;
             i.AddItem();
         }
     }

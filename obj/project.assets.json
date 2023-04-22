@@ -250,7 +250,8 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\green\\.nuget\\packages\\": {}
+    "C:\\Users\\green\\.nuget\\packages\\": {},
+    "C:\\Users\\green\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
@@ -261,8 +262,12 @@
       "packagesPath": "C:\\Users\\green\\.nuget\\packages\\",
       "outputPath": "D:\\Visual Studio Repos\\BrutalAPI\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Users\\green\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder"
+      ],
       "configFilePaths": [
         "C:\\Users\\green\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\green\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

@@ -9,11 +9,12 @@ using System;
 using Album;
 using System.Xml;
 using BepInEx.Bootstrap;
-using System.Text.RegularExpressions;
+using UnityEngine.UI;
+using UnityEditor;
 
 namespace BrutalAPI
 {
-    [BepInPlugin("Bones404.BrutalAPI", "BrutalAPI", "1.0.2")]
+    [BepInPlugin("Bones404.BrutalAPI", "BrutalAPI", "1.0.3")]
     [BepInDependency("Bones404.Album", BepInDependency.DependencyFlags.SoftDependency)]
     public class BrutalAPI : BaseUnityPlugin
     {
@@ -33,6 +34,8 @@ namespace BrutalAPI
         public static List<Item> moddedItems = new List<Item>();
         public static List<EnemySO> moddedEnemies = new List<EnemySO>();
 
+        public static List<StatusEffectInfoSO> moddedStatusEffects = new List<StatusEffectInfoSO>();
+
         public static List<ZoneBGDataBaseSO> easyAreas = new List<ZoneBGDataBaseSO>();
         public static List<ZoneBGDataBaseSO> hardAreas = new List<ZoneBGDataBaseSO>();
 
@@ -43,10 +46,13 @@ namespace BrutalAPI
         public static Dictionary<string, Assembly> assemblyDict = new Dictionary<string, Assembly>();
         public static SoundManager soundManager;
 
-        public static bool includeExampleContent = true;
+        public static bool includeExampleContent = false;
         public static char openDebugConsoleKey = '*';
+        public static bool whiteAttackIcons = false;
 
         public DebugController debug;
+
+        internal static Dictionary<StatusEffectType, List<CombatTrigger>> statusTriggers = new Dictionary<StatusEffectType, List<CombatTrigger>>();
 
         internal static List<LootItemProbability> fishingRodLoot
         {
@@ -105,16 +111,11 @@ namespace BrutalAPI
         */
 
         /* CHANGELOG
-         - Changed how item pools work
-         - Added fish pool
-         - Character can now have a different ID and name
-         - You can now add boss gate background images
-         - TP command now has an extra parameter to reroll areas
-         - Chance condition can now be used for items and effects
          */
 
         public void Awake()
         {
+
             IDetour UnlockThingsHook = new Hook(
                     typeof(SaveDataHandler).GetMethod("LoadSavedData", AllFlags),
                     typeof(BrutalAPI).GetMethod("UnlockThings", AllFlags));
@@ -128,12 +129,20 @@ namespace BrutalAPI
                     typeof(BrutalAPI).GetMethod("AssignOWManager", AllFlags));
 
             IDetour ChangeStunHook = new Hook(
-                    typeof(CombatManager).GetMethod("InitializeCombat", (BindingFlags)(-1)),
-                    typeof(BrutalAPI).GetMethod("ChangeStun", (BindingFlags)(-1)));
+                    typeof(CombatManager).GetMethod("InitializeCombat", AllFlags),
+                    typeof(BrutalAPI).GetMethod("ChangeStun", AllFlags));
 
             IDetour ChangeGuttedHook = new Hook(
-                    typeof(CombatManager).GetMethod("InitializeCombat", (BindingFlags)(-1)),
-                    typeof(BrutalAPI).GetMethod("ChangeGutted", (BindingFlags)(-1)));
+                    typeof(CombatManager).GetMethod("InitializeCombat", AllFlags),
+                    typeof(BrutalAPI).GetMethod("ChangeGutted", AllFlags));
+
+            IDetour AddStatusHook = new Hook(
+                    typeof(CombatManager).GetMethod("InitializeCombat", AllFlags),
+                    typeof(BrutalAPI).GetMethod("AddStatus", AllFlags));
+
+            IDetour ChangeAttackColorHook = new Hook(
+                    typeof(CombatManager).GetMethod("InitializeCombat", AllFlags),
+                    typeof(BrutalAPI).GetMethod("ChangeAttackColor", AllFlags));
 
             //Add description if Album is installed
             foreach (var plugin in Chainloader.PluginInfos)
@@ -199,7 +208,7 @@ namespace BrutalAPI
                 Directory.CreateDirectory(Paths.BepInExRootPath + "/plugins/brutalapi/");
                 StreamWriter streamWriter = File.CreateText(Paths.BepInExRootPath + "/plugins/brutalapi/brutalapi.config");
                 XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.LoadXml("<config includeExampleContent='false' openDebugConsoleKey='*'> </config>");
+                xmlDocument.LoadXml("<config includeExampleContent='false' openDebugConsoleKey='*' whiteAttackIcons='false'> </config>");
                 xmlDocument.Save(streamWriter);
                 streamWriter.Close();
             }
@@ -213,15 +222,16 @@ namespace BrutalAPI
             {
                 FileStream fileStream = File.Open(Paths.BepInExRootPath + "/plugins/brutalapi/brutalapi.config", FileMode.Open);
                 XmlDocument xmlDocument2 = new XmlDocument();
-                xmlDocument2.Load(fileStream);
-                includeExampleContent = bool.Parse(xmlDocument2.GetElementsByTagName("config")[0].Attributes["includeExampleContent"].Value);
+                xmlDocument2.Load(fileStream);              
                 try
                 {
+                    includeExampleContent = bool.Parse(xmlDocument2.GetElementsByTagName("config")[0].Attributes["includeExampleContent"].Value);
                     openDebugConsoleKey = char.Parse(xmlDocument2.GetElementsByTagName("config")[0].Attributes["openDebugConsoleKey"].Value);
+                    whiteAttackIcons = bool.Parse(xmlDocument2.GetElementsByTagName("config")[0].Attributes["whiteAttackIcons"].Value);
                 }
-                catch (FormatException)
-                { Debug.LogError("openDebugConsoleKey is not a single character! Please check your config file in BepInEx/plugins/brutalapi/brutalapi.config"); }
-
+                catch
+                { Debug.LogError("Config error! Please check your config file in BepInEx/plugins/brutalapi/brutalapi.config"); }
+                
                 fileStream.Close();
                 }
 
@@ -233,6 +243,7 @@ namespace BrutalAPI
                 Deformung.Add();
                 DeformungEncounter.Add();
                 MungRootBeer.Add();
+                AcidStatusEffect.Add();
             }
 
             debug = new GameObject("DebugController").AddComponent<DebugController>();
@@ -314,10 +325,34 @@ namespace BrutalAPI
             StatusEffectInfoSO newgutted;
             self._stats.statusEffectDataBase.TryGetValue(StatusEffectType.Gutted, out newgutted);
             newgutted.icon = ResourceLoader.LoadSprite("GuttedIcon", 32);
-            newgutted._description = "While gutted maximum health is always equal to current health.\nHealing while gutted will increase maximum health.\nDecrease Gutted by 1 at the end of each turn.";
+            newgutted._description = "While gutted maximum health is always equal to current health.\nDirect healing while gutted will increase maximum health.\nDecrease Gutted by 1 at the end of each turn.";
             newgutted._applied_SE_Event = self._stats.statusEffectDataBase[StatusEffectType.Ruptured].AppliedSoundEvent;
             newgutted._removed_SE_Event = self._stats.statusEffectDataBase[StatusEffectType.Ruptured].RemovedSoundEvent;
             self._stats.statusEffectDataBase[StatusEffectType.Gutted] = newgutted;
+        }
+
+        public static void AddStatus(Action<CombatManager> orig, CombatManager self)
+        {
+            orig(self);
+            for (int i = 0; i < moddedStatusEffects.Count; i++)
+            {
+                self._stats.statusEffectDataBase.Add(moddedStatusEffects[i].statusEffectType, moddedStatusEffects[i]);
+            }
+        }
+
+        public static void ChangeAttackColor(Action<CombatManager> orig, CombatManager self)
+        {
+            orig(self);
+
+            if (whiteAttackIcons)
+            {
+                Image[] images = Resources.FindObjectsOfTypeAll<Image>();
+                for (int i = 0; i < images.Length; i++)
+                {
+                    if (images[i].name == "AttackImage")
+                        images[i].color = new Color(0.93f, 0.93f, 0.93f, 1);
+                }
+            }
         }
 
         /// <summary>

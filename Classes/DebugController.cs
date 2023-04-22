@@ -30,7 +30,8 @@ namespace BrutalAPI
         public static DebugCommand LEVELUP;
         public static DebugCommand MONEY;
         public static DebugCommand TP;
-        public static DebugCommand KILL;
+        public static DebugCommand ENDCOMBAT;
+        public static DebugCommand PIGMENT;
 
         public static DebugController Instance
         {
@@ -274,25 +275,56 @@ namespace BrutalAPI
                 { WriteLine("Teleported to " + BrutalAPI.mainMenuController._informationHolder.Run.CurrentZoneDB.ZoneName); return; }
             });
 
-            //KILL
-            KILL = new DebugCommand("KILL", "KILL.", "KILL", (string[] parameters) =>
+            //ENDCOMBAT
+            ENDCOMBAT = new DebugCommand("endcombat", "Instantly ends the current combat.", "endcombat", (string[] parameters) =>
             {
-                if (parameters == null || parameters.Length != 0)
-                { WriteLine("Syntax error: " + KILL.commandFormat); return; }
+                if (parameters.Length < 0)
+                { WriteLine("Syntax error: " + ENDCOMBAT.commandFormat); return; }
 
-                if (!CombatManager.Instance._combatInitialized)
-                { WriteLine("CAN'T KILL OUT OF COMBAT :(("); return; }
+                var firstChar = CombatManager.Instance._stats.CharactersOnField.First().Value;
+                CombatEndEffect combatEndEffect = ScriptableObject.CreateInstance<CombatEndEffect>();
+                combatEndEffect._ignoreLoot = false;
+                Effect effect = new Effect(combatEndEffect, 0, null, Slots.Front);
 
-                Targetting_ByUnit_Side target = ScriptableObject.CreateInstance<Targetting_ByUnit_Side>();
-                target.getAllies = false;
-
-                Effect killdmg = new Effect(ScriptableObject.CreateInstance<DamageEffect>(), 9999, IntentType.Damage_Death, target);
-
-                CombatManager.Instance.AddPriorityRootAction(new EffectAction(ExtensionMethods.ToEffectInfoArray(new Effect[1] { killdmg }),
-                    CombatManager.Instance._stats.CharactersOnField.First().Value));
-
-                { WriteLine("KILL :)))"); return; }
+                CombatManager.Instance.AddPriorityRootAction(new EffectAction(ExtensionMethods.ToEffectInfoArray(new Effect[] { effect }), firstChar));
+                WriteLine("Ended combat"); return;
             });
+
+            //PIGMENT
+            PIGMENT = new DebugCommand("genpigment", "Generates the input pigment.", "genpigment <pigmentID> <pigmentID> <pigmentID>...", (string[] parameters) =>
+            {
+                if (!CombatManager.Instance._combatInitialized)
+                { WriteLine("Can't generate pigment when out of combat"); return; }
+
+                if (parameters == null || parameters.Length == 0)
+                { WriteLine("Syntax error: " + PIGMENT.commandFormat); return; }
+
+                Effect[] manaEffects = new Effect[parameters.Length];
+                var firstChar = CombatManager.Instance._stats.CharactersOnField.First().Value;
+
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    GenerateColorManaEffect colorManaEffect = ScriptableObject.CreateInstance<GenerateColorManaEffect>();
+
+                    int ID;
+                    if (!int.TryParse(parameters[i], out ID))
+                    { WriteLine("ID is not a number"); return; }
+
+                    ManaColorSO manaColor;
+                    if (!Pigments.PigmentDatabase.TryGetValue((PigmentType)ID, out manaColor))
+                    { WriteLine("ID is not a valid pigment ID"); return; }
+
+                    colorManaEffect.mana = manaColor;
+                    Effect effect = new Effect(colorManaEffect, 1, null, Slots.Self);
+                    manaEffects[i] = effect;
+
+                }
+                
+                CombatManager.Instance.AddPriorityRootAction(new EffectAction(ExtensionMethods.ToEffectInfoArray(manaEffects), firstChar));
+
+                WriteLine("Generated " + parameters.Length + " pigment"); return;
+            });
+
 
             commandList = new List<DebugCommand>
             {
@@ -305,7 +337,8 @@ namespace BrutalAPI
                 LEVELUP,
                 MONEY,
                 TP,
-                KILL
+                ENDCOMBAT,
+                PIGMENT
             };
 
             Debug.Log("Debug Console Ready");
@@ -362,7 +395,7 @@ namespace BrutalAPI
             {
                 if (commandstr[0] == commandList[i].commandId)
                 {
-                    if (parameters.Length <= 0 && commandstr[0] != "help" && commandstr[0] != "KILL")
+                    if (parameters.Length <= 0 && commandstr[0] != "help" && commandstr[0] != "wincombat")
                         WriteLine("No parameters given for the specified command");
                     else
                         commandList[i].Invoke(parameters);

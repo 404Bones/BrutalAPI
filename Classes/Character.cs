@@ -134,7 +134,7 @@ namespace BrutalAPI
                 BrutalAPI.unlockablesDatabase._osmanIDs.Add(entityID, osmanUnlock);
             }
 
-            Debug.Log("Added character " + c._characterName);
+            Debug.Log("Added character " + charData._characterName);
             BrutalAPI.moddedChars.Add(c);
         }
     }

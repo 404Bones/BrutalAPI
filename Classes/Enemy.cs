@@ -11,11 +11,13 @@ namespace BrutalAPI
 
         //Basics
         public string name = "Enemy";
+        public string enemyID = "";
         public int health = 10;
         public int size = 1;
         public EntityIDs entityID;
         public ManaColorSO healthColor = Pigments.Purple;
         public EnemyLootItemProbability[] loot = new EnemyLootItemProbability[0];
+        public UnitType unitType = UnitType.Unit;
 
         //Abilities
         public int priority = 0;
@@ -38,7 +40,9 @@ namespace BrutalAPI
         public void AddEnemy()
         {
             EnemySO e = ScriptableObject.CreateInstance(typeof(EnemySO)) as EnemySO;
-            string ename = Regex.Replace(name + "_EN", @"\s+", "");
+
+            string enemyIDName = enemyID == "" ? name + "_EN" : enemyID;
+            string ename = Regex.Replace(enemyIDName, @"\s+", "");
             e.name = ename;
 
             e._enemyName = name;
@@ -58,6 +62,7 @@ namespace BrutalAPI
             e.enemyTemplate = prefab;
             e.priority = ScriptableObject.CreateInstance(typeof(PrioritySO)) as PrioritySO;
             e.priority.priorityValue = priority;
+            e.unitType = unitType;
 
             //Convert Ability to EnemyAbilityInfo
             EnemyAbilityInfo[] eai = new EnemyAbilityInfo[abilities.Length];
