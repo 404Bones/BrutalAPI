@@ -44,7 +44,7 @@ namespace BrutalAPI
         public static List<PortalSignsDataBaseSO.PortalSignIcon> moddedPortalSigns = new List<PortalSignsDataBaseSO.PortalSignIcon>();
 
         public static Dictionary<string, Assembly> assemblyDict = new Dictionary<string, Assembly>();
-        public static SoundManager soundManager;
+        //public static SoundManager soundManager;
 
         public static bool includeExampleContent = false;
         public static char openDebugConsoleKey = '*';
@@ -52,7 +52,7 @@ namespace BrutalAPI
 
         public DebugController debug;
 
-        internal static Dictionary<StatusEffectType, List<CombatTrigger>> statusTriggers = new Dictionary<StatusEffectType, List<CombatTrigger>>();
+        //internal static Dictionary<StatusEffectType, List<CombatTrigger>> statusTriggers = new Dictionary<StatusEffectType, List<CombatTrigger>>();
 
         internal static List<LootItemProbability> fishingRodLoot
         {
@@ -216,7 +216,7 @@ namespace BrutalAPI
             Pigments.Setup();
             Passives.Setup();
             Slots.Setup();
-            soundManager = new GameObject("DebugController").AddComponent<SoundManager>();
+            //soundManager = new GameObject("DebugController").AddComponent<SoundManager>();
 
             if (File.Exists(Paths.BepInExRootPath + "/plugins/brutalapi/brutalapi.config"))
             {
@@ -243,7 +243,7 @@ namespace BrutalAPI
                 Deformung.Add();
                 DeformungEncounter.Add();
                 MungRootBeer.Add();
-                AcidStatusEffect.Add();
+                //AcidStatusEffect.Add();
             }
 
             debug = new GameObject("DebugController").AddComponent<DebugController>();
@@ -337,6 +337,11 @@ namespace BrutalAPI
             for (int i = 0; i < moddedStatusEffects.Count; i++)
             {
                 self._stats.statusEffectDataBase.Add(moddedStatusEffects[i].statusEffectType, moddedStatusEffects[i]);
+            }
+
+            foreach (var item in LoadedAssetsHandler.GetAbilityDB()._characterAbilityPool)
+            {
+                Debug.Log(LoadedAssetsHandler.GetCharacterAbility(item)._abilityName);
             }
         }
 

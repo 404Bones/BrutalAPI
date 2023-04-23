@@ -26,7 +26,7 @@ namespace BrutalAPI
         //Visuals
         public Sprite frontSprite = ResourceLoader.LoadSprite("BasicPartyMemberFront");
         public Sprite backSprite = ResourceLoader.LoadSprite("BasicPartyMemberBack");
-        public Sprite overworldSprite = ResourceLoader.LoadSprite("BasicPartyMemberOverworld");
+        public Sprite overworldSprite = ResourceLoader.LoadSprite("BasicPartyMemberOverworld", 32, new Vector2(0.5f, 0));
         public Sprite lockedSprite = ResourceLoader.LoadSprite("BasicPartyMemberLocked");
         public Sprite unlockedSprite = ResourceLoader.LoadSprite("BasicPartyMemberUnlocked");
         public ExtraCharacterCombatSpritesSO extraSprites;
@@ -132,6 +132,19 @@ namespace BrutalAPI
             if (osmanUnlock != UnlockableID.None)
             {
                 BrutalAPI.unlockablesDatabase._osmanIDs.Add(entityID, osmanUnlock);
+            }
+
+            //Add abilities to database
+            foreach (var level in levels)
+            {
+                foreach (var ability in level.rankAbilities)
+                {
+                    if (!LoadedAssetsHandler.LoadedCharacterAbilities.ContainsKey(ability.ability._abilityName))
+                        LoadedAssetsHandler.LoadedCharacterAbilities.Add(ability.ability._abilityName, ability.ability);
+
+                    if (!LoadedAssetsHandler.GetAbilityDB()._characterAbilityPool.Contains(ability.ability._abilityName))
+                        LoadedAssetsHandler.GetAbilityDB()._characterAbilityPool.Add(ability.ability._abilityName);
+                }  
             }
 
             Debug.Log("Added character " + charData._characterName);

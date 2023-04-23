@@ -21,6 +21,7 @@ namespace BrutalAPI
             AbilitySO a = ScriptableObject.CreateInstance(typeof(AbilitySO)) as AbilitySO;
             ability.ability = a;
             ability.cost = cost;
+            a._abilityName = name; 
             a._locAbilityData = new StringPairData(name, description);
             a._locID = "en_US";
             a.priority = ScriptableObject.CreateInstance(typeof(PrioritySO)) as PrioritySO;

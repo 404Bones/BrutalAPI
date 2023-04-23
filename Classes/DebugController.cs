@@ -395,10 +395,7 @@ namespace BrutalAPI
             {
                 if (commandstr[0] == commandList[i].commandId)
                 {
-                    if (parameters.Length <= 0 && commandstr[0] != "help" && commandstr[0] != "wincombat")
-                        WriteLine("No parameters given for the specified command");
-                    else
-                        commandList[i].Invoke(parameters);
+                    commandList[i].Invoke(parameters);
                     goto ExecutedCommand;
                 }
             }

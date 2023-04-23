@@ -32,14 +32,7 @@ namespace BrutalAPI
         public void OnStatusTriggered(object sender, object args)
         {
             (sender as IUnit).Damage(3, null, DeathType.None, -1, false, false, true, DamageType.Ruptured);
-
-            Debug.Log(CanBeRemoved);
-            Debug.Log(StatusContent);
-
             ReduceDuration(sender as IStatusEffector);
-            Debug.Log("/////////////");
-            Debug.Log(CanBeRemoved);
-            Debug.Log(StatusContent);
         }
 
         static public EffectSO ApplyAcidEffect()

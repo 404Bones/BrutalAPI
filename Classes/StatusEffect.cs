@@ -138,18 +138,15 @@ namespace BrutalAPI
 				AddTrigger(triggers[i]._method, triggers[i]._trigger, caller);
             }
         }
-		public virtual void OnTriggerDettached(IStatusEffector caller)
+        public virtual void OnTriggerDettached(IStatusEffector caller)
         {
-			List<CombatTrigger> triggers = BrutalAPI.statusTriggers[EffectType];
-			for (int i = 0; i < triggers.Count; i++)
-			{
-				RemoveTrigger(triggers[i]._method, triggers[i]._trigger, caller);
-			}
-		}
-
-		//Public Methods
-
-		public void ReduceDuration(IStatusEffector effector)
+            List<CombatTrigger> triggers = BrutalAPI.statusTriggers[EffectType];
+            for (int i = 0; i < triggers.Count; i++)
+            {
+                RemoveTrigger(triggers[i]._method, triggers[i]._trigger, caller);
+            }
+        }
+		public virtual void ReduceDuration(IStatusEffector effector)
 		{
 			if (!CanReduceDuration)
 			{
@@ -163,6 +160,7 @@ namespace BrutalAPI
 			}
 		}
 
+		//Public Methods
 		public void AddStatus()
         {
 			BrutalAPI.moddedStatusEffects.Add(EffectInfo);
@@ -220,14 +218,11 @@ namespace BrutalAPI
 			{
 				if (targets[i].HasUnit)
 				{
-					IStatusEffect statusEffect = (IStatusEffect)Activator.CreateInstance(effectClass);
-
+					StatusEffect statusEffect = (StatusEffect)Activator.CreateInstance(effectClass);
 					statusEffect.SetEffectInformation(effectInformation);
 
-					((StatusEffect)statusEffect).StatusContent = entryVariable;
-					((StatusEffect)statusEffect).Restrictor = 0;
-
-					//3, 0
+					statusEffect.StatusContent = entryVariable;
+					statusEffect.Restrictor = 0;
 
 					if (targets[i].Unit.ApplyStatusEffect(statusEffect, entryVariable))
 					{

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Classes\AcidStatusEffect.cs" />
+    <Compile Remove="Classes\SoundManager.cs" />
+    <Compile Remove="Classes\StatusEffect.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="brutalapi" />
     <None Remove="testsound.wav" />
     <None Remove="Textures\Acid.png" />
@@ -122,6 +128,12 @@
     <EmbeddedResource Include="Textures\Mungbert\MungMeUp.png" />
     <EmbeddedResource Include="Textures\Mungbert\MungRootBeer.png" />
     <EmbeddedResource Include="Textures\StunIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Classes\AcidStatusEffect.cs" />
+    <None Include="Classes\SoundManager.cs" />
+    <None Include="Classes\StatusEffect.cs" />
   </ItemGroup>
 
   <ItemGroup>

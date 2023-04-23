@@ -74,6 +74,16 @@ namespace BrutalAPI
 
             e.enemyLoot = new EnemyLoot() { _lootableItems = loot };
 
+            //Add abilities to database
+            foreach (var ability in abilities)
+            {
+                if (!LoadedAssetsHandler.LoadedEnemyAbilities.ContainsKey(ability.name))
+                    LoadedAssetsHandler.LoadedEnemyAbilities.Add(ability.name, ability.EnemyAbility().ability);
+
+                if (!LoadedAssetsHandler.GetAbilityDB()._enemyAbilityPool.Contains(ability.name))
+                    LoadedAssetsHandler.GetAbilityDB()._enemyAbilityPool.Add(ability.name);
+            }
+
             LoadedAssetsHandler.LoadedEnemies.Add(ename, e);
             Debug.Log("Added enemy " + ename);
             BrutalAPI.moddedEnemies.Add(e);
